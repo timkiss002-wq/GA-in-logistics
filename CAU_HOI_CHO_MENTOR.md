@@ -2,6 +2,11 @@
 
 Mỗi câu hỏi gồm: bối cảnh, lựa chọn hiện tại của nhóm, và các phương án. Số liệu chi tiết xem `README.md` và `results/`.
 
+Nhắc lại ba phương án chọn ô (chi tiết ở `README.md`, mục 0). Khi một SKU nằm ở nhiều ô:
+- **A** – GA tự chọn ô nào lấy, cùng lúc với thứ tự đi;
+- **B** – luôn lấy ở ô gần depot nhất;
+- **C** – WMS chỉ định sẵn một ô, người lấy hàng không được đổi; GA chỉ tìm thứ tự đi.
+
 ---
 
 ## A. Quyết định phương pháp (ảnh hưởng trực tiếp tới kết luận)

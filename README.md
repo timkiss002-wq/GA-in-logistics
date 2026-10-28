@@ -9,6 +9,50 @@ Các câu hỏi cần mentor góp ý nằm trong **[CAU_HOI_CHO_MENTOR.md](CAU_H
 
 ---
 
+## 0. Ba phương án chọn ô A, B, C – đọc mục này trước
+
+**Vấn đề.** Trong kho này, một SKU (mã giày × cỡ) thường nằm ở **nhiều ô** cùng lúc. Số ô trung bình mỗi SKU ở tầng 1–2 là:
+
+| Chính sách | Random | Dedicated | Class-Based | Hybrid |
+|---|---|---|---|---|
+| Số ô / SKU | 4,5 | 1,0 | 8,6 | 11,8 |
+
+Khi một wave cần lấy SKU X, người lấy hàng phải đến **ô nào** trong các ô chứa X? Bài Gnone et al. (2025) **không nói**. Nhóm thử ba cách:
+
+| | Ai quyết định lấy ở ô nào? | GA tìm gì? | Ví dụ: SKU X nằm ở 3 ô X1, X2, X3 |
+|---|---|---|---|
+| **A – GA tự chọn ô** | Thuật toán, cùng lúc với lộ trình (bài toán Family-TSP) | Thứ tự đi **và** ô cho từng SKU | GA được chọn X1, X2 hoặc X3, miễn sao tổng quãng đường ngắn nhất |
+| **B – ô gần depot nhất** | Quy tắc cố định: luôn lấy ô gần điểm xuất phát nhất | Chỉ thứ tự đi | Luôn lấy X2 nếu X2 gần depot nhất, kể cả khi X1 nằm ngay trên đường đi |
+| **C – ô chỉ định sẵn** | Hệ thống (WMS) chỉ định trước một ô; người lấy hàng không được đổi | Chỉ thứ tự đi | Pick list ghi "lấy X ở X3", nên phải đến X3. Trong thí nghiệm, ô chỉ định được bốc ngẫu nhiên và cố định theo wave (`chay_C_10seed.py`, hàm `o_chi_dinh`) |
+
+Cả ba đều là tour khép kín depot → các ô → depot, dùng cùng router GRO và cùng 50 wave. Chỉ cách chọn ô là khác nhau.
+
+**Vì sao điều này quan trọng.**
+- Với cùng một chính sách, A luôn cho quãng đường ngắn nhất, vì B và C chỉ là trường hợp con (bị ép vào 1 ô).
+- Nhưng mức lợi từ A khác nhau giữa các chính sách:
+  - Dedicated có 1 ô/SKU nên A = B = C, quãng đường không đổi.
+  - Hybrid có khoảng 12 ô/SKU nên hưởng lợi rất lớn khi được chọn ô.
+- Vì vậy **thứ hạng đảo ngược**:
+
+| | Tốt nhất → tệ nhất |
+|---|---|
+| A, B | Hybrid < Class-Based < Random < Dedicated |
+| C | **Dedicated < Hybrid** < Random < Class-Based |
+| Bài báo | **Dedicated < Hybrid** < Class-Based < Random |
+
+**Vì sao nhóm đề xuất C làm thiết lập chính, A và B làm phân tích độ nhạy:**
+1. `Picking_Wave.csv` ghi sẵn **một ô cụ thể** cho mỗi dòng lấy hàng. Ở kho thật, hệ thống chỉ định ô.
+2. Bài 2024 của cùng nhóm tác giả viết pick list lấy từ WMS, và mọi vị trí trong đó phải được ghé.
+3. C là cách duy nhất tái hiện được thứ hạng D < H và kết luận hậu kiểm của bài.
+
+A và B vẫn được báo cáo vì giả định này chưa chắc chắn và làm đổi kết luận:
+- A là cận tốt nhất, tương ứng một WMS biết chọn ô cùng lúc với lộ trình.
+- B là một quy tắc đơn giản mà người lấy hàng có thể tự áp dụng.
+
+Hình `results/minh_hoa_wave0.png` minh hoạ cùng một wave: Dedicated có 25 ô ứng viên, Hybrid có 269 ô ứng viên.
+
+---
+
 ## 1. Xem nhanh kết quả, không cần chạy lại
 
 | Muốn xem | Mở file |
@@ -69,10 +113,7 @@ Các điểm được đánh dấu **(*)** là chỗ bài báo không nói rõ, 
 - **Wave:** 50 wave, bốc SKU (mã × cỡ) không lặp, xác suất tỉ lệ với nhu cầu trong `Customer_Order`, seed 2025. Chỉ dùng SKU có ô ở cả 4 chính sách (969 SKU, chiếm 57,7% nhu cầu).
   - Bản chính: 25 SKU mỗi wave **(*)**.
   - Bản thử: số SKU thay đổi theo phân phối của wave thật.
-- **Cách chọn ô khi một SKU nằm ở nhiều ô (*):**
-  - **A** – GA tự chọn ô (Family-TSP);
-  - **B** – luôn lấy ở ô gần depot nhất;
-  - **C** – WMS chỉ định sẵn một ô (ngẫu nhiên, cố định theo wave). GA chỉ tìm thứ tự đi.
+- **Cách chọn ô khi một SKU nằm ở nhiều ô (*):** A = GA tự chọn ô; B = ô gần depot nhất; C = WMS chỉ định sẵn. Giải thích chi tiết ở **mục 0**.
 - **Original (*):** bố trí thực tế của công ty (`Random_Storage.csv`) + ô chỉ định + đi theo lối kiểu S-shape, không dùng GA. Dùng chung một Original cho cả A, B, C. Trên 51 pick list thật, lộ trình thật của công ty dài hơn cách đi S-shape này 9,9%.
 - **Số lần chạy:** 10 seed mỗi wave; giá trị của mỗi wave là trung bình 10 seed.
 - **Đơn vị:** đơn vị toạ độ của dataset. Chưa quy đổi được sang mét, nên chỉ so % và thứ hạng.
