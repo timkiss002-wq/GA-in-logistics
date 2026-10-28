@@ -1,0 +1,59 @@
+Số món mỗi wave (50 wave sinh): TB 10.9, min 1, median 12, max 24 | phân phối thật (≤25): TB 11.1, median 12
+
+Bài báo (m): CV (%) Original 35, Random 33, Dedicated 49, Class-Based 41, Hybrid 42 | Min/Mean (%) Original 23, Random 28, Dedicated 5, Class-Based 14, Hybrid 14
+   % so với Original: Random -16.0, Dedicated -31.2, Class-Based -24.3, Hybrid -29.5 | Thứ hạng: Dedicated < Hybrid < Class-Based < Random
+
+C cũ – cố định 25 SKU (đơn vị toạ độ):
+               mean    std     min     25%     50%     75%     max
+chinh_sach                                                        
+Original     6615.7  609.4  5508.0  6184.5  6551.0  7025.5  8154.0
+Random       6021.6  436.3  5100.2  5691.6  5927.7  6325.8  7348.2
+Dedicated    4836.7  738.4  3348.8  4343.7  4718.5  5245.5  6440.6
+Class-Based  6381.8  475.7  5208.0  6220.4  6436.7  6727.3  7557.8
+Hybrid       5165.5  787.3  3832.4  4520.6  5162.7  5640.2  6776.4
+   CV (%)                  : Original 9, Random 7, Dedicated 15, Class-Based 7, Hybrid 15
+   Min / Mean (%)          : Original 83, Random 85, Dedicated 69, Class-Based 82, Hybrid 74
+   % so với Original (Mean): Random -9.0, Dedicated -26.9, Class-Based -3.5, Hybrid -21.9
+   Thứ hạng (Mean)  : Dedicated < Hybrid < Random < Class-Based
+   Thứ hạng (Median): Dedicated < Hybrid < Random < Class-Based
+
+C mới – số món thay đổi (đơn vị toạ độ):
+               mean     std    min     25%     50%     75%     max
+chinh_sach                                                        
+Original     4078.9  2095.6  590.0  1936.5  4588.0  5792.5  7448.0
+Random       3787.6  1866.1  590.0  1936.5  4191.0  5186.8  6900.4
+Dedicated    2801.8  1533.8   70.0  1549.5  3066.9  3980.6  5262.2
+Class-Based  3788.0  1596.2  902.0  2234.5  4169.3  4984.9  6464.0
+Hybrid       3001.2  1570.7  202.0  1644.5  3217.3  4014.6  5915.6
+   CV (%)                  : Original 51, Random 49, Dedicated 55, Class-Based 42, Hybrid 52
+   Min / Mean (%)          : Original 14, Random 16, Dedicated 2, Class-Based 24, Hybrid 7
+   % so với Original (Mean): Random -7.1, Dedicated -31.3, Class-Based -7.1, Hybrid -26.4
+   Thứ hạng (Mean)  : Dedicated < Hybrid < Random < Class-Based
+   Thứ hạng (Median): Dedicated < Hybrid < Class-Based < Random
+
+Shapiro–Wilk (C mới):  Original W=0.913 p=0.001, Random W=0.920 p=0.002, Dedicated W=0.953 p=0.046, Class-Based W=0.939 p=0.012, Hybrid W=0.963 p=0.114
+ANOVA 5 nhóm, C cũ (25 SKU): F = 76.267, p = 6.46e-42
+ANOVA 5 nhóm, C mới (số món thay đổi): F = 5.071, p = 6.08e-04
+ANOVA 5 nhóm, bài báo: F = 8.248
+Friedman (C mới, ghép theo wave): chi2 = 90.48, p = 1.04e-18
+
+Hậu kiểm Tukey HSD và Wilcoxon ghép cặp/Holm (C mới):
+   Original    – Random     : chênh TB    291.4 | Tukey p = 0.9197 | Wilcoxon p_Holm = 2.59e-06
+   Original    – Dedicated  : chênh TB   1277.2 | Tukey p = 0.0029 | Wilcoxon p_Holm = 4.91e-11
+   Original    – Class-Based: chênh TB    290.9 | Tukey p = 0.9201 | Wilcoxon p_Holm = 3.52e-02
+   Original    – Hybrid     : chênh TB   1077.7 | Tukey p = 0.0190 | Wilcoxon p_Holm = 3.40e-07
+   Random      – Dedicated  : chênh TB    985.8 | Tukey p = 0.0408 | Wilcoxon p_Holm = 1.16e-09
+   Random      – Class-Based: chênh TB     -0.5 | Tukey p = 1.0000 | Wilcoxon p_Holm = 1.00e+00
+   Random      – Hybrid     : chênh TB    786.4 | Tukey p = 0.1644 | Wilcoxon p_Holm = 2.75e-07
+   Dedicated   – Class-Based: chênh TB   -986.2 | Tukey p = 0.0406 | Wilcoxon p_Holm = 5.95e-08
+   Dedicated   – Hybrid     : chênh TB   -199.4 | Tukey p = 0.9791 | Wilcoxon p_Holm = 2.52e-02
+   Class-Based – Hybrid     : chênh TB    786.8 | Tukey p = 0.1640 | Wilcoxon p_Holm = 4.25e-08
+
+Thời gian GRO TB mỗi wave (s): Random 0.50, Dedicated 0.50, Class-Based 0.49, Hybrid 0.49
+
+% giảm so với Original của từng wave, trung bình theo nhóm số món:
+chinh_sach  Random  Dedicated  Class-Based  Hybrid  so_wave
+1–5           -0.7      -28.1         43.4    -9.6       17
+6–12          -5.4      -26.5         -7.7   -25.3        9
+13–18         -9.1      -31.2        -11.9   -28.9       16
+19–25         -6.7      -33.4         -8.7   -28.0        8

@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.log
+# Bộ dữ liệu tải riêng (xem data/README.md)
+data/*
+!data/README.md

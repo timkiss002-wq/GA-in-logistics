@@ -1,0 +1,60 @@
+
+================ GIẢ ĐỊNH A: GA tự chọn ô ================
+Bảng 3 của nhóm (đơn vị toạ độ dataset; mỗi wave = trung bình 10 seed):
+               mean    std     min     25%     50%     75%     max  so_voi_Original_%  bai_bao_mean  bai_bao_so_voi_Original_%
+chinh_sach                                                                                                                    
+Original     6666.1  377.1  5588.6  6454.1  6590.6  6877.2  7823.8                0.0        1056.9                        0.0
+Random       3455.4  763.2  2149.8  2842.6  3440.5  4068.2  4778.6              -48.2         887.3                      -16.0
+Dedicated    4836.7  738.4  3348.8  4343.7  4718.5  5245.5  6440.6              -27.4         726.8                      -31.2
+Class-Based  3408.9  664.9  2109.8  3026.2  3316.7  3606.1  5422.4              -48.9         800.6                      -24.3
+Hybrid       2240.8  550.5   956.2  1946.2  2269.6  2630.9  3463.0              -66.4         745.0                      -29.5
+Thứ hạng (ngắn -> dài), nhóm : Hybrid < Class-Based < Random < Dedicated
+Thứ hạng (ngắn -> dài), bài báo: Dedicated < Hybrid < Class-Based < Random
+Dao động giữa 10 seed (SD trung bình mỗi wave): Random 106.3, Dedicated 92.5, Class-Based 144.1, Hybrid 136.6
+Khoảng cách tới lời giải tốt nhất biết được (BKS = min(GRO 10 seed, DP+2opt)), %:
+   trung bình 10 seed: Random 9.19, Dedicated 2.76, Class-Based 18.01, Hybrid 14.45
+   tốt nhất 10 seed  : Random 4.89, Dedicated 0.26, Class-Based 10.58, Hybrid 6.32
+Shapiro-Wilk: Original W=0.955 p=0.055, Random W=0.960 p=0.089, Dedicated W=0.982 p=0.634, Class-Based W=0.948 p=0.027, Hybrid W=0.981 p=0.579
+ANOVA một chiều (như bài báo): F = 355.925, p = 9.01e-101
+Friedman (ghép cặp theo wave): chi2 = 174.02, p = 1.44e-36
+Wilcoxon ghép cặp + hiệu chỉnh Holm (chênh = A - B; r = rank-biserial):
+   Original    vs Random     : chênh TB   3210.7 | p_Holm = 1.78e-14 | r = +1.00
+   Original    vs Dedicated  : chênh TB   1829.5 | p_Holm = 1.78e-14 | r = +1.00
+   Original    vs Class-Based: chênh TB   3257.2 | p_Holm = 1.78e-14 | r = +1.00
+   Original    vs Hybrid     : chênh TB   4425.3 | p_Holm = 1.78e-14 | r = +1.00
+   Random      vs Dedicated  : chênh TB  -1381.3 | p_Holm = 5.70e-12 | r = -0.96
+   Random      vs Class-Based: chênh TB     46.5 | p_Holm = 7.89e-01 | r = +0.04  (không có ý nghĩa)
+   Random      vs Hybrid     : chênh TB   1214.5 | p_Holm = 5.99e-11 | r = +0.93
+   Dedicated   vs Class-Based: chênh TB   1427.7 | p_Holm = 3.06e-13 | r = +0.98
+   Dedicated   vs Hybrid     : chênh TB   2595.8 | p_Holm = 1.78e-14 | r = +1.00
+   Class-Based vs Hybrid     : chênh TB   1168.1 | p_Holm = 2.93e-13 | r = +0.99
+
+================ GIẢ ĐỊNH B: lấy ở ô gần depot nhất ================
+Bảng 3 của nhóm (đơn vị toạ độ dataset; mỗi wave = trung bình 10 seed):
+               mean    std     min     25%     50%     75%     max  so_voi_Original_%  bai_bao_mean  bai_bao_so_voi_Original_%
+chinh_sach                                                                                                                    
+Original     4851.0  726.7  3158.0  4353.5  4728.0  5289.0  6376.0                0.0        1056.9                        0.0
+Random       4655.1  656.4  3230.4  4131.8  4579.1  5063.6  6082.2               -4.0         887.3                      -16.0
+Dedicated    4836.7  738.4  3348.8  4343.7  4718.5  5245.5  6440.6               -0.3         726.8                      -31.2
+Class-Based  4107.6  753.8  2352.0  3660.7  4164.9  4563.0  5895.8              -15.3         800.6                      -24.3
+Hybrid       3135.1  694.8  1686.8  2621.8  3135.6  3608.8  4934.2              -35.4         745.0                      -29.5
+Thứ hạng (ngắn -> dài), nhóm : Hybrid < Class-Based < Random < Dedicated
+Thứ hạng (ngắn -> dài), bài báo: Dedicated < Hybrid < Class-Based < Random
+Dao động giữa 10 seed (SD trung bình mỗi wave): Random 94.2, Dedicated 92.5, Class-Based 45.6, Hybrid 51.2
+Khoảng cách tới lời giải tốt nhất biết được (BKS = min(GRO 10 seed, DP+2opt)), %:
+   trung bình 10 seed: Random 1.85, Dedicated 2.76, Class-Based 1.23, Hybrid 2.24
+   tốt nhất 10 seed  : Random 0.00, Dedicated 0.26, Class-Based 0.23, Hybrid 0.04
+Shapiro-Wilk: Original W=0.982 p=0.631, Random W=0.985 p=0.777, Dedicated W=0.982 p=0.634, Class-Based W=0.989 p=0.909, Hybrid W=0.987 p=0.854
+ANOVA một chiều (như bài báo): F = 51.614, p = 1.73e-31
+Friedman (ghép cặp theo wave): chi2 = 104.77, p = 9.49e-22
+Wilcoxon ghép cặp + hiệu chỉnh Holm (chênh = A - B; r = rank-biserial):
+   Original    vs Random     : chênh TB    195.9 | p_Holm = 6.35e-10 | r = +0.92
+   Original    vs Dedicated  : chênh TB     14.3 | p_Holm = 7.09e-01 | r = +0.06  (không có ý nghĩa)
+   Original    vs Class-Based: chênh TB    743.4 | p_Holm = 5.66e-06 | r = +0.74
+   Original    vs Hybrid     : chênh TB   1715.9 | p_Holm = 8.79e-13 | r = +0.98
+   Random      vs Dedicated  : chênh TB   -181.6 | p_Holm = 6.94e-01 | r = -0.15  (không có ý nghĩa)
+   Random      vs Class-Based: chênh TB    547.5 | p_Holm = 8.67e-04 | r = +0.59
+   Random      vs Hybrid     : chênh TB   1520.0 | p_Holm = 3.60e-12 | r = +0.97
+   Dedicated   vs Class-Based: chênh TB    729.1 | p_Holm = 1.34e-05 | r = +0.76
+   Dedicated   vs Hybrid     : chênh TB   1701.6 | p_Holm = 1.78e-14 | r = +1.00
+   Class-Based vs Hybrid     : chênh TB    972.5 | p_Holm = 9.71e-08 | r = +0.83

@@ -1,0 +1,15 @@
+Số ô trung bình mỗi SKU:
+chinh_sach  Class-Based  Dedicated  Hybrid  Random
+tang                                              
+ca_4_tang           5.7        3.8     9.6     6.9
+tang_1_2            4.5        1.0     9.4     3.4
+
+Quãng đường so với Original (%), và thứ hạng:
+     tang  cach_chon_o  Random_%  Dedicated_%  Class-Based_%  Hybrid_%                                  thu_hang
+ tang_1_2    A_tu_chon     -46.8        -24.7          -47.0     -65.6 Hybrid < Class-Based < Random < Dedicated
+ tang_1_2  B_gan_depot      -3.8          0.6          -15.4     -35.5 Hybrid < Class-Based < Random < Dedicated
+ tang_1_2 C_o_chi_dinh      -8.9        -26.3           -3.8     -21.4 Dedicated < Hybrid < Random < Class-Based
+ca_4_tang    A_tu_chon     -65.4        -58.3          -68.2     -75.9 Hybrid < Class-Based < Random < Dedicated
+ca_4_tang  B_gan_depot      -3.4         -8.4           -7.3     -33.6 Hybrid < Dedicated < Class-Based < Random
+ca_4_tang C_o_chi_dinh     -10.0        -10.9          -11.6     -18.2 Hybrid < Class-Based < Dedicated < Random
+  BÀI BÁO            ?     -16.0        -31.2          -24.3     -29.5 Dedicated < Hybrid < Class-Based < Random

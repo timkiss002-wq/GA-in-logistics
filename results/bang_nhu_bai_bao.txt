@@ -1,0 +1,134 @@
+BẢNG 2 – THAM SỐ GRO
+                    Tham số          Bài báo                  Nhóm
+   Kích thước quần thể (Np)             1000                  1000
+              Số thế hệ (G)             1000                  1000
+             Tournament (T)                3                     3
+          Xác suất lai (Pc)             90 %                  90 %
+     Xác suất đột biến (Pm)              8 %                   8 %
+                    Số wave               50                    50
+            Số SKU mỗi wave      25 (tối đa)                    25
+Số lần chạy (seed) mỗi wave        không nêu                    10
+              Tầng lấy hàng tầng 1–2 (mục 3)              tầng 1–2
+                      Depot không nêu toạ độ      CC-08 (403, 631)
+         Đơn vị quãng đường                m đơn vị toạ độ dataset
+
+
+BẢNG 3 – THỐNG KÊ MÔ TẢ QUÃNG ĐƯỜNG (50 wave; mỗi wave = TB 10 seed; Original cố định chung)
+
+Bài báo (m):
+          Original   Random  Dedicated  Class-Based   Hybrid
+Mean       1056.90   887.32     726.77       800.55   744.96
+Std         366.91   294.41     354.94       327.06   310.15
+Min         246.00   246.43      33.80       109.34   105.90
+Q1 (25%)    837.75   715.30     512.01       615.02   536.73
+Median     1103.00   923.75     749.11       839.84   781.48
+Q3 (75%)   1295.00  1121.75     913.25       986.55   996.00
+Max        1750.00  1380.00    1529.00      1424.00  1428.00
+   % so với Original theo Mean  : Random -16.0%, Dedicated -31.2%, Class-Based -24.3%, Hybrid -29.5%
+   % so với Original theo Median: Random -16.3%, Dedicated -32.1%, Class-Based -23.9%, Hybrid -29.1%
+   Thứ hạng (Mean)  : Dedicated < Hybrid < Class-Based < Random
+   Thứ hạng (Median): Dedicated < Hybrid < Class-Based < Random
+
+Nhóm – A – GA tự chọn ô (đơn vị toạ độ):
+chinh_sach  Original  Random  Dedicated  Class-Based  Hybrid
+Mean          6615.7  3455.4     4836.7       3408.9  2240.8
+Std            609.4   763.2      738.4        664.9   550.5
+Min           5508.0  2149.8     3348.8       2109.8   956.2
+Q1 (25%)      6184.5  2842.6     4343.7       3026.2  1946.2
+Median        6551.0  3440.5     4718.5       3316.7  2269.6
+Q3 (75%)      7025.5  4068.2     5245.5       3606.1  2630.9
+Max           8154.0  4778.6     6440.6       5422.4  3463.0
+   % so với Original theo Mean  : Random -47.8%, Dedicated -26.9%, Class-Based -48.5%, Hybrid -66.1%
+   % so với Original theo Median: Random -47.5%, Dedicated -28.0%, Class-Based -49.4%, Hybrid -65.4%
+   Thứ hạng (Mean)  : Hybrid < Class-Based < Random < Dedicated
+   Thứ hạng (Median): Hybrid < Class-Based < Random < Dedicated
+
+Nhóm – B – ô gần depot nhất (đơn vị toạ độ):
+chinh_sach  Original  Random  Dedicated  Class-Based  Hybrid
+Mean          6615.7  4655.1     4836.7       4107.6  3135.1
+Std            609.4   656.4      738.4        753.8   694.8
+Min           5508.0  3230.4     3348.8       2352.0  1686.8
+Q1 (25%)      6184.5  4131.8     4343.7       3660.7  2621.8
+Median        6551.0  4579.1     4718.5       4164.9  3135.6
+Q3 (75%)      7025.5  5063.6     5245.5       4563.0  3608.8
+Max           8154.0  6082.2     6440.6       5895.8  4934.2
+   % so với Original theo Mean  : Random -29.6%, Dedicated -26.9%, Class-Based -37.9%, Hybrid -52.6%
+   % so với Original theo Median: Random -30.1%, Dedicated -28.0%, Class-Based -36.4%, Hybrid -52.1%
+   Thứ hạng (Mean)  : Hybrid < Class-Based < Random < Dedicated
+   Thứ hạng (Median): Hybrid < Class-Based < Random < Dedicated
+
+Nhóm – C – ô chỉ định sẵn (đơn vị toạ độ):
+chinh_sach  Original  Random  Dedicated  Class-Based  Hybrid
+Mean          6615.7  6021.6     4836.7       6381.8  5165.5
+Std            609.4   436.3      738.4        475.7   787.3
+Min           5508.0  5100.2     3348.8       5208.0  3832.4
+Q1 (25%)      6184.5  5691.6     4343.7       6220.4  4520.6
+Median        6551.0  5927.7     4718.5       6436.7  5162.7
+Q3 (75%)      7025.5  6325.8     5245.5       6727.3  5640.2
+Max           8154.0  7348.2     6440.6       7557.8  6776.4
+   % so với Original theo Mean  : Random -9.0%, Dedicated -26.9%, Class-Based -3.5%, Hybrid -21.9%
+   % so với Original theo Median: Random -9.5%, Dedicated -28.0%, Class-Based -1.7%, Hybrid -21.2%
+   Thứ hạng (Mean)  : Dedicated < Hybrid < Random < Class-Based
+   Thứ hạng (Median): Dedicated < Hybrid < Random < Class-Based
+
+
+KIỂM ĐỊNH SHAPIRO–WILK (H0: phân phối chuẩn; p > 0,05 -> không bác bỏ)
+        Cột  Bài báo W  Bài báo p    A W    A p    B W    B p    C W    C p
+   Original     0.9723     0.2864 0.9747 0.3550 0.9747 0.3550 0.9747 0.3550
+     Random     0.9651     0.1458 0.9600 0.0890 0.9851 0.7770 0.9678 0.1879
+  Dedicated     0.9903     0.9537 0.9819 0.6339 0.9819 0.6339 0.9819 0.6339
+Class-Based     0.9755     0.3797 0.9477 0.0274 0.9886 0.9090 0.9636 0.1258
+     Hybrid     0.9838     0.7210 0.9806 0.5788 0.9870 0.8544 0.9733 0.3137
+
+
+ANOVA MỘT CHIỀU (5 nhóm: Original + 4 chính sách, như bài báo)
+           Phương án       F        p Friedman χ² (ghép theo wave) Friedman p
+             Bài báo   8.248      ≈ 0                            –          –
+    A – GA tự chọn ô 312.493 6.24e-95                       172.29   3.38e-36
+B – ô gần depot nhất 169.010 3.22e-69                        151.9   7.96e-32
+  C – ô chỉ định sẵn  76.267 6.46e-42                       126.45   2.24e-26
+
+Bài báo chỉ ghi: "Dedicated và Hybrid thấp hơn có ý nghĩa so với Random và Class-Based" (không nêu tên phép hậu kiểm).
+
+HẬU KIỂM TỪNG CẶP: Tukey HSD (đi kèm ANOVA) và Wilcoxon ghép cặp theo wave, hiệu chỉnh Holm
+           Phương án                     Cặp  Chênh TB (cột 1 − cột 2)  Tukey p   Tukey 95% CI Wilcoxon p (Holm) Có ý nghĩa (Tukey, α=0,05)
+    A – GA tự chọn ô       Original – Random                    3160.3   0.0000   [2792; 3529]          1.78e-14                         có
+    A – GA tự chọn ô    Original – Dedicated                    1779.0   0.0000   [1411; 2147]          2.36e-13                         có
+    A – GA tự chọn ô  Original – Class-Based                    3206.8   0.0000   [2839; 3575]          1.51e-09                         có
+    A – GA tự chọn ô       Original – Hybrid                    4374.8   0.0000   [4007; 4743]          1.78e-14                         có
+    A – GA tự chọn ô      Random – Dedicated                   -1381.3   0.0000 [-1750; -1013]          7.60e-12                         có
+    A – GA tự chọn ô    Random – Class-Based                      46.5   0.9969    [-322; 415]          7.89e-01                      không
+    A – GA tự chọn ô         Random – Hybrid                    1214.5   0.0000    [846; 1583]          8.98e-11                         có
+    A – GA tự chọn ô Dedicated – Class-Based                    1427.7   0.0000   [1060; 1796]          3.82e-13                         có
+    A – GA tự chọn ô      Dedicated – Hybrid                    2595.8   0.0000   [2228; 2964]          1.78e-14                         có
+    A – GA tự chọn ô    Class-Based – Hybrid                    1168.1   0.0000    [800; 1536]          3.52e-13                         có
+B – ô gần depot nhất       Original – Random                    1960.6   0.0000   [1580; 2341]          2.49e-14                         có
+B – ô gần depot nhất    Original – Dedicated                    1779.0   0.0000   [1398; 2160]          2.03e-13                         có
+B – ô gần depot nhất  Original – Class-Based                    2508.1   0.0000   [2127; 2889]          1.78e-14                         có
+B – ô gần depot nhất       Original – Hybrid                    3480.6   0.0000   [3100; 3861]          1.78e-14                         có
+B – ô gần depot nhất      Random – Dedicated                    -181.6   0.6848    [-562; 199]          3.47e-01                      không
+B – ô gần depot nhất    Random – Class-Based                     547.5   0.0010     [167; 928]          5.78e-04                         có
+B – ô gần depot nhất         Random – Hybrid                    1520.0   0.0000   [1139; 1901]          2.25e-12                         có
+B – ô gần depot nhất Dedicated – Class-Based                     729.1   0.0000    [348; 1110]          1.01e-05                         có
+B – ô gần depot nhất      Dedicated – Hybrid                    1701.6   0.0000   [1321; 2082]          1.78e-14                         có
+B – ô gần depot nhất    Class-Based – Hybrid                     972.5   0.0000    [592; 1353]          6.47e-08                         có
+  C – ô chỉ định sẵn       Original – Random                     594.1   0.0000     [251; 938]          3.78e-09                         có
+  C – ô chỉ định sẵn    Original – Dedicated                    1779.0   0.0000   [1435; 2123]          3.04e-13                         có
+  C – ô chỉ định sẵn  Original – Class-Based                     233.9   0.3359    [-110; 577]          8.23e-02                      không
+  C – ô chỉ định sẵn       Original – Hybrid                    1450.1   0.0000   [1107; 1794]          1.84e-11                         có
+  C – ô chỉ định sẵn      Random – Dedicated                    1184.9   0.0000    [841; 1528]          2.63e-10                         có
+  C – ô chỉ định sẵn    Random – Class-Based                    -360.2   0.0346    [-704; -17]          1.86e-03                         có
+  C – ô chỉ định sẵn         Random – Hybrid                     856.0   0.0000    [512; 1200]          2.31e-07                         có
+  C – ô chỉ định sẵn Dedicated – Class-Based                   -1545.2   0.0000 [-1889; -1202]          3.55e-14                         có
+  C – ô chỉ định sẵn      Dedicated – Hybrid                    -328.9   0.0679     [-672; 15]          3.31e-03                      không
+  C – ô chỉ định sẵn    Class-Based – Hybrid                    1216.3   0.0000    [873; 1560]          2.94e-12                         có
+
+
+THỜI GIAN CHẠY GRO MỖI WAVE (giây, 1 lần chạy = 1 wave × 1 seed, 1 nhân CPU, Python + numba)
+chinh_sach           Random  Dedicated Class-Based Hybrid  TB 4 chính sách
+Phương án                                                                 
+A – GA tự chọn ô       0.86       0.87        0.86   0.87             0.87
+B – ô gần depot nhất   0.97       0.96        0.97   0.97             0.97
+C – ô chỉ định sẵn     0.98       0.97        0.97   0.98             0.98
+Bài báo                   –  thấp nhất           –      –           128.00
+Số ô ứng viên trung bình mỗi SKU (A): Random 4.5, Dedicated 1.0, Class-Based 8.6, Hybrid 11.8; B và C: 1 ô.
