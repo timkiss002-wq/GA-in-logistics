@@ -4,3 +4,7 @@ __pycache__/
 # Bộ dữ liệu tải riêng (xem data/README.md)
 data/*
 !data/README.md
+
+# rl_putaway: dữ liệu tải riêng, file trung gian sinh lại được
+rl_putaway/data
+rl_putaway/results/picks_*.npz

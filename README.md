@@ -7,6 +7,9 @@ Repo này chứa code và kết quả của nhóm khi tái hiện hai bài báo 
 
 Các câu hỏi cần mentor góp ý nằm trong **[CAU_HOI_CHO_MENTOR.md](CAU_HOI_CHO_MENTOR.md)**.
 
+> **Mới (01/11/2026):** thư mục **[rl_putaway/](rl_putaway/README.md)** chứa agent RL cất hàng tối ưu đồng thời mixing (de Assis 2026) và quãng đường (GRO). Thư mục gồm tái hiện de Assis 2026, kết quả trên 2.913 wave kiểm tra và ablation study. Câu hỏi cho mentor ở [rl_putaway/CAU_HOI_CHO_MENTOR.md](rl_putaway/CAU_HOI_CHO_MENTOR.md).
+
+
 ---
 
 ## 0. Ba phương án chọn ô A, B, C – đọc mục này trước
