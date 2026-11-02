@@ -1,137 +1,82 @@
-# GA in logistics – Tái hiện GRO (de Assis et al., 2024) và Gnone et al. (2025)
+# 08_pitching – toàn bộ code, kết quả và tài liệu cho buổi pitching
 
-Repo này chứa code và kết quả của nhóm khi tái hiện hai bài báo trên cùng một bộ dữ liệu kho giày (de Assis et al., 2025, Data in Brief):
+**Đề tài:** Cất hàng (putaway) trong kho giày dép, tối ưu đồng thời mức trộn hàng trong ô (Mixing Index, MI) và quãng đường lấy hàng (đo bằng GRO).
+Hướng tiếp cận: kết hợp hai bài gốc, de Assis et al. (2026) cho phía nhập hàng và Gnone et al. (2025) cho phía lấy hàng.
 
-1. **de Assis et al. (2024), IEEE Access** – thuật toán Genetic Route Optimisation (GRO) cho lộ trình lấy hàng.
-2. **Gnone et al. (2025), IFAC-PapersOnLine 59(10)** – so sánh 4 chính sách lưu kho (Random, Dedicated, Class-Based, Hybrid) bằng GRO.
+**Dữ liệu:** de Assis et al. (2025), *Order Picking Dataset from a Warehouse of a Footwear Manufacturing Company*, Data in Brief. Mendeley Data `pf2w725pw3`.
 
-Các câu hỏi cần mentor góp ý nằm trong **[CAU_HOI_CHO_MENTOR.md](CAU_HOI_CHO_MENTOR.md)**.
+Ngày gom: 02/11/2026. Đây là bản **sao**: mọi file gốc vẫn nằm nguyên ở `03_code`, `04_outputs`, `07_impliment`, `06_vietbao`.
 
 ---
 
-## 0. Ba phương án chọn ô A, B, C – đọc mục này trước
+## Cấu trúc thư mục
 
-**Vấn đề.** Trong kho này, một SKU (mã giày × cỡ) thường nằm ở **nhiều ô** cùng lúc. Số ô trung bình mỗi SKU ở tầng 1–2 là:
+| Thư mục | Nội dung | Lên GitHub? |
+|---|---|---|
+| `01_bai_bao_goc/` | PDF các bài tham khảo (Gnone 2025, de Assis 2024/2026, dataset paper, Wanis 2026…) | Không (bản quyền) |
+| `02_data/` | Dữ liệu gốc `order_picking/` và 2 file Excel giải thích dữ liệu | Không (tải từ Mendeley) |
+| `03_tai_hien_GRO2024_Gnone2025/` | **Implement bài gốc 1:** GRO của de Assis et al. (2024) và thí nghiệm 4 chính sách lưu kho của Gnone et al. (2025), phương án chọn ô A/B/C, GA minh hoạ từng bước | Có (trừ `data/`) |
+| `04_RL_putaway_va_deAssis2026/` | **Implement bài gốc 2:** tái hiện de Assis et al. (2026), 2 cách đọc. **Mô hình chính của nhóm:** môi trường kho, hàm J, agent PPO (mô hình A), baseline, ablation, đánh giá lại bằng GRO | Có (trừ `data/` và `results/picks_*.npz`) |
+| `05_hoc_RL_kho_ti_hon/` | RL từ con số 0: Q-learning trên kho 4 ô, kiểm tra lại công thức MI | Có |
+| `06_du_lieu_va_wave_minh_hoa/` | Làm sạch dữ liệu, minh hoạ wave 33361 từng bước, hình nhu cầu và sản lượng | Có |
+| `07_ket_qua_tong_hop/` | Bảng Excel, hình và báo cáo đã tổng hợp (RL 01/11, tái hiện Gnone) | Có |
+| `08_bai_bao_nhap/` | Bản nháp bài báo IEEE (docx, pdf, zip Overleaf), Introduction cũ | Không (bài chưa công bố) |
+| `09_tai_lieu_tham_khao/` | File RIS để nhập Zotero | Có |
 
-| Chính sách | Random | Dedicated | Class-Based | Hybrid |
-|---|---|---|---|---|
-| Số ô / SKU | 4,5 | 1,0 | 8,6 | 11,8 |
+---
 
-Khi một wave cần lấy SKU X, người lấy hàng phải đến **ô nào** trong các ô chứa X? Bài Gnone et al. (2025) **không nói**. Nhóm thử ba cách:
+## Mạch trình bày gợi ý và file tương ứng
 
-| | Ai quyết định lấy ở ô nào? | GA tìm gì? | Ví dụ: SKU X nằm ở 3 ô X1, X2, X3 |
+| # | Nội dung pitching | Mở file nào | Chạy demo |
 |---|---|---|---|
-| **A – GA tự chọn ô** | Thuật toán, cùng lúc với lộ trình (bài toán Family-TSP) | Thứ tự đi **và** ô cho từng SKU | GA được chọn X1, X2 hoặc X3, miễn sao tổng quãng đường ngắn nhất |
-| **B – ô gần depot nhất** | Quy tắc cố định: luôn lấy ô gần điểm xuất phát nhất | Chỉ thứ tự đi | Luôn lấy X2 nếu X2 gần depot nhất, kể cả khi X1 nằm ngay trên đường đi |
-| **C – ô chỉ định sẵn** | Hệ thống (WMS) chỉ định trước một ô; người lấy hàng không được đổi | Chỉ thứ tự đi | Pick list ghi "lấy X ở X3", nên phải đến X3. Trong thí nghiệm, ô chỉ định được bốc ngẫu nhiên và cố định theo wave (`chay_C_10seed.py`, hàm `o_chi_dinh`) |
+| 1 | Bài toán và dữ liệu: 1 wave chứa gì, quãng đường tính thế nào | `06_du_lieu_va_wave_minh_hoa/wave_33361_tung_buoc.xlsx` | `python wave_33361_replay.py` |
+| 2 | GA/GRO hoạt động ra sao (quần thể, chọn lọc, lai, đột biến) | `03_.../ga_6_buoc.py`, `ga_tu_hoc.py` | `python ga_6_buoc.py` |
+| 3 | Tái hiện GRO 2024 | `03_.../results/tai_hien_gro2024_bang5.csv` | `python tai_hien_gro2024.py` |
+| 4 | Tái hiện Gnone 2025: thứ hạng chính sách đảo theo cách chọn ô (A/B/C) | `03_.../results/bang_nhu_bai_bao.xlsx`, `hinh3a_boxplot.png` | `python tai_hien_gnone2025.py demo` |
+| 5 | Tái hiện de Assis 2026 (MI), 2 cách đọc và nguyên nhân lệch | `04_.../results/deassis2026/bang_tai_hien.md`, `bang_cachdoc2.md`, `nguyen_nhan_lech.md` | `python deassis2026_repl.py` |
+| 6 | Gap: mỗi bài chỉ nhìn một phía (nhập hoặc lấy) → hàm mục tiêu J = λ·MI + (1−λ)·D/D0 | `04_.../BAO_CAO_NGHIEN_CUU.md` | – |
+| 7 | RL hiểu từ kho tí hon (tổng reward = −J) | `05_hoc_RL_kho_ti_hon/README.md` | `python rl_ti_hon.py --xem 0.5` |
+| 8 | Mô hình A: kết quả 5 seed, đánh đổi MI–quãng đường | `04_.../results/huong1/KET_QUA_HUONG1.md`, `fig1_danh_doi_5seed.png` | `python rl_ppo.py eval --tag main2` |
+| 9 | Ablation và hạn chế | `04_.../results/huong1/bang9_ablation.md` | – |
 
-Cả ba đều là tour khép kín depot → các ô → depot, dùng cùng router GRO và cùng 50 wave. Chỉ cách chọn ô là khác nhau.
+## Các con số chính (đã đối chiếu với file kết quả)
 
-**Vì sao điều này quan trọng.**
-- Với cùng một chính sách, A luôn cho quãng đường ngắn nhất, vì B và C chỉ là trường hợp con (bị ép vào 1 ô).
-- Nhưng mức lợi từ A khác nhau giữa các chính sách:
-  - Dedicated có 1 ô/SKU nên A = B = C, quãng đường không đổi.
-  - Hybrid có khoảng 12 ô/SKU nên hưởng lợi rất lớn khi được chọn ô.
-- Vì vậy **thứ hạng đảo ngược**:
+**Tái hiện GRO 2024 (51 pick list thật).** Quãng đường trung bình của lộ trình thực tế là 3.446,8. Với GRO hợp lý là 2.724,1, tức giảm 20,97%. Bài báo công bố giảm 21,48%. GRO đúng theo pseudo-code của bài cho 5.021,4, dài hơn cả lộ trình thực tế.
 
-| | Tốt nhất → tệ nhất |
-|---|---|
-| A, B | Hybrid < Class-Based < Random < Dedicated |
-| C | **Dedicated < Hybrid** < Random < Class-Based |
-| Bài báo | **Dedicated < Hybrid** < Class-Based < Random |
+**Tái hiện Gnone 2025.** Thứ hạng các chính sách lưu kho đảo ngược tuỳ cách chọn ô khi một SKU nằm ở nhiều ô. Chỉ phương án C (WMS gán sẵn ô) cho lại thứ hạng của bài: Dedicated < Hybrid < Class-Based < Random. Class-Based vẫn lệch, nghi do vị trí depot.
 
-**Vì sao nhóm đề xuất C làm thiết lập chính, A và B làm phân tích độ nhạy:**
-1. `Picking_Wave.csv` ghi sẵn **một ô cụ thể** cho mỗi dòng lấy hàng. Ở kho thật, hệ thống chỉ định ô.
-2. Bài 2024 của cùng nhóm tác giả viết pick list lấy từ WMS, và mọi vị trí trong đó phải được ghé.
-3. C là cách duy nhất tái hiện được thứ hạng D < H và kết luận hậu kiểm của bài.
+**Tái hiện de Assis 2026 (MI ban đầu 0,918).**
 
-A và B vẫn được báo cáo vì giả định này chưa chắc chắn và làm đổi kết luận:
-- A là cận tốt nhất, tương ứng một WMS biết chọn ô cùng lúc với lộ trình.
-- B là một quy tắc đơn giản mà người lấy hàng có thể tự áp dụng.
+| Agent | MI bài | Cách đọc 1 | Cách đọc 2 |
+|---|---|---|---|
+| heuristic | 0,830 | 0,760 | 0,846 |
+| supervised | 0,884 | 0,724 | 0,856 |
+| adaptive | 0,822 | 0,748 | 0,846 |
 
-Hình `results/minh_hoa_wave0.png` minh hoạ cùng một wave: Dedicated có 25 ô ứng viên, Hybrid có 269 ô ứng viên.
+Cách đọc 2 gần số của bài hơn.
+
+**Mô hình A (5 seed).** A tốt hơn mọi heuristic ở λ = 0,3–0,5, có ý nghĩa ở cả 5/5 seed (Wilcoxon theo wave, Holm). Ở λ = 0,5 so với hiện trạng Random:
+- lộ trình ngắn hơn khoảng 33% (3.225 so với 4.782);
+- MI thấp hơn khoảng 17% (0,718 so với 0,861).
+
+**Ablation.** Đặc trưng mixing là thành phần quan trọng nhất. PPO và "nhìn xa" (γ) đóng góp nhỏ hoặc không có bằng chứng. Vì vậy đóng góp của bài là **J cộng chính sách học được điều kiện theo λ**, còn PPO chỉ là bước tinh chỉnh.
+
+**Hạn chế cần nói trước.**
+- Điều kiện theo λ còn yếu: MI của A chỉ đổi từ 0,738 xuống 0,687 khi λ đi từ 0 đến 1.
+- Khoảng cách tính theo đơn vị toạ độ của dataset, chưa đổi ra mét.
+- Bài gốc không công bố code, nên một số tham số phải giả định. Các giả định ghi trong README của từng thư mục.
 
 ---
 
-## 1. Xem nhanh kết quả, không cần chạy lại
+## Cài đặt và chạy
 
-| Muốn xem | Mở file |
-|---|---|
-| Đủ các bảng như bài Gnone (Bảng 2, Bảng 3, Shapiro–Wilk, ANOVA, hậu kiểm, thời gian) cho 3 phương án chọn ô | `results/bang_nhu_bai_bao.xlsx` (mỗi bảng một sheet) hoặc `results/bang_nhu_bai_bao.txt` |
-| Hình 3a – boxplot (đơn vị gốc) | `results/hinh3a_boxplot.png` |
-| Hình 3a – boxplot chuẩn hoá theo % Original trung bình | `results/hinh3a_boxplot_phan_tram.png` |
-| Hình 3b – scatter Original vs GRO | `results/hinh3b_scatter.png` |
-| Ảnh hưởng của số món mỗi wave (25 cố định so với thay đổi) | `results/C_bien_doi_ket_qua.txt`, `results/hinh_C_bien_doi.png` |
-| Tái hiện GRO 2024 (51 pick list thật) | `results/tai_hien_gro2024_bang5.csv` |
-| Vì sao cách chọn ô đảo ngược thứ hạng (minh hoạ 1 wave) | `results/minh_hoa_wave0.png` |
-
-## 2. Cài đặt và chạy
-
-```bash
-pip install -r requirements.txt
-# Đặt bộ dữ liệu vào data/ (xem data/README.md)
 ```
+pip install numpy pandas scipy matplotlib numba networkx openpyxl torch
+```
+Bản torch CPU là đủ.
 
-| Lệnh | Làm gì | Cần dữ liệu? | Thời gian (2 nhân CPU) |
-|---|---|---|---|
-| `python bang_nhu_bai_bao.py` | Dựng lại mọi bảng và hình 3a, 3b từ `results/` | Không | vài giây |
-| `python ve_boxplot_phan_tram.py` | Boxplot chuẩn hoá theo % Original | Không | vài giây |
-| `python tai_hien_gnone2025.py kiemtra` | So mô hình khoảng cách với Dijkstra trên 3.000 cặp điểm (mong đợi: sai số 0) | Có | vài giây |
-| `python tai_hien_gnone2025.py demo` | 1 wave: in quá trình tiến hoá của GRO sau mỗi 100 thế hệ | Có | ~10 giây |
-| `python tai_hien_gro2024.py` | Tái hiện bài 2024: 51 pick list thật × 10 seed | Có | ~10 phút |
-| `python tai_hien_gnone2025.py` | Phương án A và B: 50 wave × 4 chính sách × 10 seed | Có | ~1 giờ |
-| `python chay_C_10seed.py` | Phương án C: 50 wave × 4 chính sách × 10 seed, kèm Original cố định | Có | ~15 phút |
-| `python chay_C_wave_bien_doi.py` | Phương án C, số món mỗi wave thay đổi theo phân phối wave thật | Có | ~8 phút |
-| `python chan_doan_gnone2025.py` | Thí nghiệm chẩn đoán: tầng 1–2 so với 4 tầng, × A/B/C (1 seed) | Có | ~10 phút |
+- `03_...`: đọc README trong thư mục. Dữ liệu nằm sẵn trong `03_.../data/` (bản trên máy).
+- `04_...`: chạy theo bảng 10 bước trong README. Dữ liệu nằm sẵn trong `04_.../data/`. File `inst.npz`, `s0.npz`, `tref.npy` và mô hình trong `models/` đã có sẵn, không cần huấn luyện lại để đánh giá.
+- `06_...`: hai script đọc dữ liệu từ `../02_data/order_picking`.
 
-Kết quả ghi vào `results/` và ghi đè lên file cũ cùng tên.
-
-## 3. Cấu trúc code
-
-| File | Vai trò |
-|---|---|
-| `data.py` | Đọc dữ liệu: ô kệ, 4 file chính sách, wave; chuẩn hoá cỡ giày |
-| `gro.py` | Mô hình khoảng cách theo lối đi (rectilinear qua 3 lối dọc), ma trận khoảng cách, bản tham chiếu GA + quy hoạch động + 2-opt |
-| `tai_hien_gro2024.py` | Tái hiện bài 2024: GRO "đúng chữ pseudo-code" và GRO "hợp lý" |
-| `tai_hien_gnone2025.py` | Sinh 50 wave, router GRO hợp lý (6 bước GA), Original, phương án A/B, thống kê |
-| `chay_C_10seed.py` | Phương án C (ô chỉ định sẵn) và Original cố định |
-| `chay_C_wave_bien_doi.py` | Phương án C với số món mỗi wave thay đổi |
-| `chan_doan_gnone2025.py` | Thay từng giả định một để tìm nguyên nhân lệch với bài báo |
-| `bang_nhu_bai_bao.py` | Dựng bảng và hình giống bài Gnone |
-| `ve_boxplot_phan_tram.py` | Boxplot chuẩn hoá |
-
-## 4. Thiết lập và giả định của nhóm
-
-Các điểm được đánh dấu **(*)** là chỗ bài báo không nói rõ, nhóm phải tự đặt giả định.
-
-- **Router (GRO hợp lý):**
-  - Np = 1000, G = 1000, tournament T = 3, Pc = 90%, Pm = 8% (Bảng 2 của Gnone).
-  - Mỗi cá thể có một thứ tự đi riêng, lai OX, đột biến đổi chỗ 2 SKU, giữ lại cá thể tốt nhất (elitism).
-  - Bản đúng từng chữ pseudo-code của bài 2024 cho kết quả tệ hơn công ty: nửa đầu lộ trình bị "đóng băng". Vì vậy nhóm dùng bản hợp lý. Bản này tái hiện được mức giảm 21,0% (bài: 21,5%).
-- **Tour khép kín:** depot → các ô → depot. **Depot = CC-08 (403, 631) (*)**.
-- **Chỉ lấy hàng ở tầng 1–2.** Tầng 3–4 là kho dự trữ (Gnone, mục 3).
-- **Wave:** 50 wave, bốc SKU (mã × cỡ) không lặp, xác suất tỉ lệ với nhu cầu trong `Customer_Order`, seed 2025. Chỉ dùng SKU có ô ở cả 4 chính sách (969 SKU, chiếm 57,7% nhu cầu).
-  - Bản chính: 25 SKU mỗi wave **(*)**.
-  - Bản thử: số SKU thay đổi theo phân phối của wave thật.
-- **Cách chọn ô khi một SKU nằm ở nhiều ô (*):** A = GA tự chọn ô; B = ô gần depot nhất; C = WMS chỉ định sẵn. Giải thích chi tiết ở **mục 0**.
-- **Original (*):** bố trí thực tế của công ty (`Random_Storage.csv`) + ô chỉ định + đi theo lối kiểu S-shape, không dùng GA. Dùng chung một Original cho cả A, B, C. Trên 51 pick list thật, lộ trình thật của công ty dài hơn cách đi S-shape này 9,9%.
-- **Số lần chạy:** 10 seed mỗi wave; giá trị của mỗi wave là trung bình 10 seed.
-- **Đơn vị:** đơn vị toạ độ của dataset. Chưa quy đổi được sang mét, nên chỉ so % và thứ hạng.
-- **Kiểm chứng:**
-  - Mô hình khoảng cách khớp Dijkstra trên đồ thị lối đi, sai số 0.
-  - GRO cách lời giải tốt nhất biết được 1,7–3,3% (phương án C).
-
-## 5. Kết quả chính (% giảm so với Original, trung bình 50 wave)
-
-| | Random | Dedicated | Class-Based | Hybrid | Thứ hạng |
-|---|---|---|---|---|---|
-| **Bài báo** | −16,0 | −31,2 | −24,3 | −29,5 | **D < H** < C < R |
-| A – GA tự chọn ô | −47,8 | −26,9 | −48,5 | −66,1 | H < C < R < D |
-| B – ô gần depot | −29,6 | −26,9 | −37,9 | −52,6 | H < C < R < D |
-| **C – ô chỉ định** | −9,0 | −26,9 | −3,5 | −21,9 | **D < H** < R < C |
-| C, số món thay đổi | −7,1 | −31,3 | −7,1 | −26,4 | D < H < R ≈ C (Median: D < H < C < R) |
-
-- Chỉ C tái hiện được thứ hạng D < H và kết luận hậu kiểm của bài ("Dedicated và Hybrid thấp hơn có ý nghĩa so với Random và Class-Based").
-- Khi cho số món mỗi wave thay đổi, F của ANOVA giảm từ 76,3 xuống 5,1 (bài: 8,2), và độ phân tán gần với bài hơn.
-- Class-Based vẫn lệch. Nghi do depot: lớp A trong file Class-Based nằm quanh CC-11/12, không quanh CC-08.
-- **Phát hiện:** thứ hạng chính sách lưu kho **đảo ngược** tuỳ theo người lấy hàng có được chọn ô hay không (A/B so với C). Bài Gnone không nêu giả định này.
+Nếu lấy code từ GitHub (không có dữ liệu): tải zip từ Mendeley, giải nén `order_picking` vào `03_.../data/` và `04_.../data/`. Các file `results/picks_*.npz` (khoảng 37 MB) không đưa lên GitHub; chạy lại bước 7 trong README của `04_...` để sinh lại.

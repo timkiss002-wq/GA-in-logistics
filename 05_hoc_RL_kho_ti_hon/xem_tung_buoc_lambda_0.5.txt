@@ -1,0 +1,54 @@
+D0 (cất ngẫu nhiên, trung bình trên 3480 cách cất hợp lệ) = 3.0345
+
+===== EPISODE 1  (epsilon = 1.00) =====
+bước 0: hàng về A | kho L0[...] L1[...] L2[...] L3[...]
+        Q trước khi chọn: L0:+0.000  L1:+0.000  L2:+0.000  L3:+0.000
+        chọn L3 [khám phá (ngẫu nhiên)] | ΔMI=+0.000  ΔD/D0=+1.977  reward=-0.989 | Q: +0.000 -> -0.198
+bước 1: hàng về B | kho L0[...] L1[...] L2[...] L3[A..]
+        Q trước khi chọn: L0:+0.000  L1:+0.000  L2:+0.000  L3:+0.000
+        chọn L3 [khám phá (ngẫu nhiên)] | ΔMI=+0.125  ΔD/D0=+0.659  reward=-0.392 | Q: +0.000 -> -0.078
+bước 2: hàng về A | kho L0[...] L1[...] L2[...] L3[AB.]
+        Q trước khi chọn: L0:+0.000  L1:+0.000  L2:+0.000  L3:+0.000
+        chọn L2 [khám phá (ngẫu nhiên)] | ΔMI=+0.000  ΔD/D0=-0.494  reward=+0.247 | Q: +0.000 -> +0.049
+bước 3: hàng về B | kho L0[...] L1[...] L2[A..] L3[AB.]
+        Q trước khi chọn: L0:+0.000  L1:+0.000  L2:+0.000  L3:+0.000
+        chọn L2 [khám phá (ngẫu nhiên)] | ΔMI=+0.125  ΔD/D0=-0.165  reward=+0.020 | Q: +0.000 -> +0.004
+bước 4: hàng về A | kho L0[...] L1[...] L2[AB.] L3[AB.]
+        Q trước khi chọn: L0:+0.000  L1:+0.000  L2:+0.000  L3:+0.000
+        chọn L1 [khám phá (ngẫu nhiên)] | ΔMI=+0.000  ΔD/D0=-0.494  reward=+0.247 | Q: +0.000 -> +0.049
+bước 5: hàng về B | kho L0[...] L1[A..] L2[AB.] L3[AB.]
+        Q trước khi chọn: L0:+0.000  L1:+0.000  L2:+0.000  L3:+0.000
+        chọn L2 [khám phá (ngẫu nhiên)] | ΔMI=-0.042  ΔD/D0=+0.000  reward=+0.021 | Q: +0.000 -> +0.004
+Kết thúc: kho L0[...] L1[A..] L2[ABB] L3[AB.] | tổng reward = -0.8456 | -J cuối = -0.8456  (luôn bằng nhau)
+  ... episode   500, epsilon 0.82: nếu dừng học ngay bây giờ, agent cho J = 0.3712
+  ... episode  1000, epsilon 0.65: nếu dừng học ngay bây giờ, agent cho J = 0.3712
+  ... episode  1500, epsilon 0.47: nếu dừng học ngay bây giờ, agent cho J = 0.3712
+  ... episode  2000, epsilon 0.30: nếu dừng học ngay bây giờ, agent cho J = 0.3712
+  ... episode  2500, epsilon 0.12: nếu dừng học ngay bây giờ, agent cho J = 0.3712
+  ... episode  3000, epsilon 0.02: nếu dừng học ngay bây giờ, agent cho J = 0.3712
+  ... episode  3500, epsilon 0.02: nếu dừng học ngay bây giờ, agent cho J = 0.3712
+
+===== EPISODE 4000  (epsilon = 0.02) =====
+bước 0: hàng về A | kho L0[...] L1[...] L2[...] L3[...]
+        Q trước khi chọn: L0:-0.371  L1:-0.371  L2:-0.371  L3:-0.371
+        chọn L0 [khai thác (Q lớn nhất)] | ΔMI=+0.000  ΔD/D0=+0.494  reward=-0.247 | Q: -0.371 -> -0.371
+bước 1: hàng về B | kho L0[A..] L1[...] L2[...] L3[...]
+        Q trước khi chọn: L0:-0.124  L1:-0.124  L2:-0.124  L3:-0.124
+        chọn L0 [khai thác (Q lớn nhất)] | ΔMI=+0.125  ΔD/D0=+0.165  reward=-0.145 | Q: -0.124 -> -0.124
+bước 2: hàng về A | kho L0[AB.] L1[...] L2[...] L3[...]
+        Q trước khi chọn: L0:+0.021  L1:+0.021  L2:+0.021  L3:+0.021
+        chọn L0 [khai thác (Q lớn nhất)] | ΔMI=-0.042  ΔD/D0=+0.000  reward=+0.021 | Q: +0.021 -> +0.021
+bước 3: hàng về B | kho L0[AAB] L1[...] L2[...] L3[...]
+        Q trước khi chọn: L0: đầy   L1:+0.000  L2:+0.000  L3:+0.000
+        chọn L1 [khai thác (Q lớn nhất)] | ΔMI=+0.000  ΔD/D0=+0.000  reward=-0.000 | Q: +0.000 -> +0.000
+bước 4: hàng về A | kho L0[AAB] L1[B..] L2[...] L3[...]
+        Q trước khi chọn: L0: đầy   L1:-0.042  L2:+0.000  L3:+0.000
+        chọn L2 [khai thác (Q lớn nhất)] | ΔMI=+0.000  ΔD/D0=+0.000  reward=-0.000 | Q: +0.000 -> +0.000
+bước 5: hàng về B | kho L0[AAB] L1[B..] L2[A..] L3[...]
+        Q trước khi chọn: L0: đầy   L1:+0.000  L2:-0.062  L3:+0.000
+        chọn L1 [khai thác (Q lớn nhất)] | ΔMI=+0.000  ΔD/D0=+0.000  reward=-0.000 | Q: +0.000 -> +0.000
+Kết thúc: kho L0[AAB] L1[BB.] L2[A..] L3[...] | tổng reward = -0.3712 | -J cuối = -0.3712  (luôn bằng nhau)
+  ... episode  4000, epsilon 0.02: nếu dừng học ngay bây giờ, agent cho J = 0.3712
+
+Agent học được : L0[AAB] L1[BB.] L2[A..] L3[...]  J = 0.3712
+Đáp án đúng    : L0[AAB] L1[BB.] L2[A..] L3[...]  J = 0.3712

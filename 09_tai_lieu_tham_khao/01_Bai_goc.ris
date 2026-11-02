@@ -1,0 +1,91 @@
+TY  - JOUR
+AU  - Gnone, Daniel Gomez
+AU  - de Assis, Rodrigo Furlan
+AU  - Ouhimmou, Mustapha
+AU  - de Paula Ferreira, William
+TI  - Enhancing warehouse efficiency: A study on storage allocation assignment in a footwear manufacturing company
+PY  - 2025
+JO  - IFAC-PapersOnLine
+T2  - IFAC-PapersOnLine
+VL  - 59
+IS  - 10
+SP  - 2485
+EP  - 2490
+DO  - 10.1016/j.ifacol.2025.09.418
+UR  - https://doi.org/10.1016/j.ifacol.2025.09.418
+N1  - Bài gốc 1 của đề tài: so sánh Random/Dedicated/Class-Based/Hybrid bằng GRO (50 wave, 25 SKU). Nhóm đã tái hiện (phương án C khớp thứ hạng D < H).
+L1  - D:\Tài liệu NCKH =\01_papers\1-s2.0-S2405896325011814-main.pdf
+KW  - SLAP
+KW  - storage policy
+KW  - GRO
+KW  - genetic algorithm
+KW  - order picking
+KW  - bài gốc
+ER  - 
+
+TY  - JOUR
+AU  - de Assis, Rodrigo Furlan
+AU  - Assad Neto, Anis
+AU  - Ribeiro da Silva, Elias
+AU  - Wächter, Tim
+AU  - de Santa-Eulalia, Luis Antonio
+TI  - Agentic architecture for progressive autonomous storage location assignment in warehouses
+PY  - 2026
+JO  - Procedia CIRP
+T2  - Procedia CIRP
+VL  - 146
+SP  - 643
+EP  - 648
+DO  - 10.1016/j.procir.2026.03.258
+UR  - https://doi.org/10.1016/j.procir.2026.03.258
+N1  - Bài gốc 2 của đề tài: kiến trúc agent 3 chế độ tự chủ cho xếp hàng nhập kho, chỉ số Mixing Index.
+L1  - D:\Tài liệu NCKH =\01_papers\1-s2.0-S2212827126012461-main.pdf
+KW  - SLAP
+KW  - agent-based
+KW  - Mixing Index
+KW  - autonomous decision-making
+KW  - bài gốc
+ER  - 
+
+TY  - JOUR
+AU  - de Assis, Rodrigo Furlan
+AU  - de Paula Ferreira, William
+AU  - Faria, A. F.
+AU  - Santa-Eulalia, Luis Antonio
+AU  - Ouhimmou, Mustapha
+AU  - Gharbi, Ali
+TI  - Optimising warehouse order picking: Real case application in the shoe manufacturing industry
+PY  - 2024
+JO  - IEEE Access
+T2  - IEEE Access
+VL  - 12
+SP  - 170868
+EP  - 170888
+DO  - 10.1109/ACCESS.2024.3497592
+UR  - https://doi.org/10.1109/ACCESS.2024.3497592
+N1  - Thuật toán GRO. Nhóm tái hiện: giảm 21,0% (bài 21,5%). PDF đính kèm là bản preprint SSRN 4760992, chưa phải bản IEEE chính thức.
+L1  - D:\Tài liệu NCKH =\01_papers\ssrn-4760992.pdf
+KW  - GRO
+KW  - genetic algorithm
+KW  - picker routing
+KW  - family TSP
+KW  - order picking
+ER  - 
+
+TY  - UNPB
+AU  - Wanis, Nour
+AU  - de Paula Ferreira, William
+AU  - de Assis, Rodrigo Furlan
+AU  - Abreu, Levi Ribeiro de
+TI  - Multi-objective storage location assignment: Balancing correlation and bin heterogeneity
+PY  - 2026
+DO  - 10.2139/ssrn.7560299
+UR  - https://doi.org/10.2139/ssrn.7560299
+PB  - SSRN
+N1  - Preprint SSRN, nộp EJOR, chưa bình duyệt. Cùng bộ dữ liệu kho giày.
+L1  - D:\Tài liệu NCKH =\01_papers\ssrn-7560299.pdf
+KW  - SLAP
+KW  - NSGA-II
+KW  - correlation
+KW  - preprint
+ER  - 
