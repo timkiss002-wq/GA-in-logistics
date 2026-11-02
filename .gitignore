@@ -1,6 +1,13 @@
+# Dữ liệu gốc: tải từ Mendeley (xem data/README.md)
+03_tai_hien_GRO2024_Gnone2025/data/*
+!03_tai_hien_GRO2024_Gnone2025/data/README.md
+04_RL_putaway_va_deAssis2026/data/*
+!04_RL_putaway_va_deAssis2026/data/README.md
+02_data/
+# Bài báo gốc (bản quyền) và bản nháp bài báo (chưa công bố)
+01_bai_bao_goc/
+08_bai_bao_nhap/
+# Kết quả trung gian lớn, sinh lại bằng rl_ppo.py eval
+04_RL_putaway_va_deAssis2026/results/picks_*.npz
 __pycache__/
-*.pyc
-*.log
-# Bộ dữ liệu tải riêng (xem data/README.md)
-data/*
-!data/README.md
+~$*
