@@ -10,7 +10,7 @@ Báo cáo đầy đủ nằm ở **[BAO_CAO_NGHIEN_CUU.md](BAO_CAO_NGHIEN_CUU.md
 
 ## Tóm tắt kết quả (2.913 wave kiểm tra, 18/07–19/10/2023)
 
-> **Cập nhật 02/11/2026.** Bản trước của README này kết luận "A tốt nhất ở λ = 0,3–0,7" và "lợi ích đến từ nhìn xa". Cả hai kết luận chỉ dựa trên 1 seed huấn luyện và **đã bị kết quả 3 seed bác bỏ**. Phần dưới đây thay thế hoàn toàn bản cũ. Chi tiết: [BAO_CAO_NGHIEN_CUU.md](BAO_CAO_NGHIEN_CUU.md), mục 5.2–5.3; Bảng 7 và 8 trong `results/bang_ket_qua.md`.
+> **Cập nhật 02/11/2026.** Bản trước của README này kết luận "A tốt nhất ở λ = 0,3–0,7" và "lợi ích đến từ nhìn xa". Cả hai kết luận chỉ dựa trên 1 seed huấn luyện và **đã bị kết quả nhiều seed bác bỏ** (3 seed, rồi 5 seed). Phần dưới đây thay thế hoàn toàn bản cũ. Chi tiết: [BAO_CAO_NGHIEN_CUU.md](BAO_CAO_NGHIEN_CUU.md), mục 5.2–5.3; Bảng 7 và 8 trong `results/bang_ket_qua.md`.
 
 **Hàm mục tiêu:** J = λ·MI/MI0 + (1−λ)·T/T0, lấy trung bình theo wave.
 - MI là Mixing Index của kho; T là độ dài lộ trình của wave.
@@ -26,23 +26,26 @@ Báo cáo đầy đủ nằm ở **[BAO_CAO_NGHIEN_CUU.md](BAO_CAO_NGHIEN_CUU.md
 | Nearest (ô trống gần depot nhất) | 0,821 | 3.099 | 0,793 |
 | Turnover (hàng bán chạy vào ô gần) | 0,753 | 3.291 | 0,773 |
 | GreedyJ (giảm J tức thời) | 0,676 | 3.677 | 0,769 |
-| **Mô hình A, TB ± ĐLC 3 seed** | 0,707 ± 0,021 | 3.271 ± 61 | **0,745 ± 0,007** |
+| **Mô hình A, TB ± ĐLC 5 seed** | 0,718 ± 0,021 | 3.225 ± 77 | **0,746 ± 0,005** |
 
-**A tốt ở đâu (3 seed).** So với heuristic tốt nhất tại từng λ:
-- λ = 0,3 / 0,4 / 0,5: J thấp hơn 0,013 / 0,021 / 0,024; cả 3 seed đều tốt hơn có ý nghĩa.
-- λ = 0,6: thấp hơn 0,009, 2/3 seed có ý nghĩa.
-- So với hiện trạng ở λ = 0,5: lộ trình ngắn hơn 32%, MI thấp hơn 18%.
+**A tốt ở đâu (5 seed, `results/huong1/bang7_5seed.md`).** So với heuristic tốt nhất tại từng λ:
+- λ = 0,3 / 0,4 / 0,5: J thấp hơn 0,016 / 0,022 / 0,022; **cả 5/5 seed** tốt hơn có ý nghĩa (Wilcoxon cặp theo wave, Holm).
+- λ = 0,6: chỉ 2/5 seed, không kết luận được. λ = 0,2: −0,004 ± 0,008, chưa rõ.
+- So với hiện trạng ở λ = 0,5: lộ trình ngắn hơn khoảng 33%, MI thấp hơn khoảng 17%.
 
-**Hạn chế ở hai đầu.** Khi λ ≤ 0,2, Nearest bằng hoặc tốt hơn A. Khi λ ≥ 0,7, GreedyJ hoặc heuristic de Assis bằng hoặc tốt hơn A. Nói cách khác, ở hai đầu, quy tắc chuyên một mục tiêu vẫn thắng.
+**Hạn chế ở hai đầu.** Ở λ = 0, Nearest tốt hơn A (3/5 seed có ý nghĩa); λ = 0,1 không rõ. Khi λ ≥ 0,7, GreedyJ hoặc heuristic de Assis tốt hơn A. MI của A chỉ đổi từ 0,738 (λ = 0) xuống 0,687 (λ = 1), tức điều kiện theo λ còn yếu.
 
-**Ablation then chốt (3 seed, Δ = J biến thể − J của A, TB trên λ = 0,2/0,5/0,8; dương là kém hơn).**
+**Ablation (mỗi biến thể 3 seed, `results/huong1/bang9_ablation.md`).** Δ = J biến thể − J của A cùng seed, TB trên λ = 0,2/0,5/0,8; dương là kém hơn.
 
 | Biến thể | Δ TB ± ĐLC | Kết luận |
 |---|---|---|
-| Bỏ PPO, chỉ bắt chước | +0,005 ± 0,005 | PPO giúp ít, không ổn định |
-| PPO với γ = 0 (không nhìn xa) | +0,000 ± 0,012 | Không có bằng chứng "nhìn xa" giúp ích |
+| Bỏ đặc trưng mixing | +0,046 ± 0,001 (3/3 seed có ý nghĩa) | Thành phần quan trọng nhất |
+| Mạng riêng cho λ = 0,5 (so ở λ = 0,5) | +0,006 ± 0,003 (2/3) | Mạng dùng chung cho mọi λ tốt hơn |
+| Bỏ PPO, chỉ bắt chước | +0,005 ± 0,005 | PPO giúp ít |
+| PPO với γ = 0 | +0,000 ± 0,012 | Không có bằng chứng "nhìn xa" giúp ích |
+| Bắt chước chỉ GreedyJ (bỏ danh mục) | +0,001 ± 0,002; tách theo λ: +0,030 / +0,001 / −0,027 | Là đánh đổi: danh mục giúp ở λ thấp, làm kém ở λ cao |
 
-Các ablation khác (bỏ đặc trưng mixing, bỏ đường tắt ΔJ + khởi động, mạng riêng cho từng λ, bắt chước GreedyJ thay cho danh mục) hiện mới có 1 seed. Đang chạy lại với 3 seed; PR sẽ được cập nhật khi xong.
+Tóm tắt đầy đủ: `results/huong1/KET_QUA_HUONG1.md`.
 
 **Tái hiện de Assis 2026 theo hai cách đọc.**
 - Cách đọc 1 (đúng chữ của bài) chỉ khớp một phần: mức giảm MI lớn hơn bài nhiều.
@@ -87,6 +90,6 @@ Các file trung gian `inst.npz`, `s0.npz`, `t0.json`, `tref.npy` và mô hình �
 | `tour_fast.py` | Độ dài lộ trình nhanh (NN + 2-opt) dùng làm reward. Khớp GRO với r = 0,996 (`check_tour.py`) |
 | `gro.py` | GRO của nhóm, giữ nguyên từ phần tái hiện Gnone 2025 |
 | `deassis2026_repl.py` | Tái hiện Algorithm 1 của de Assis 2026, kèm phân tích độ nhạy |
-| `models/` | `main2*.pt` là mô hình A (seed 0, 1, 2). Các file `ab*.pt` là các biến thể ablation |
+| `models/` | `main2*.pt` là mô hình A (seed 0–4). Các file `ab*.pt` là các biến thể ablation (`ab3_*`: ablation hướng 1, 3 seed) |
 | `results/` | Bảng (`bang_ket_qua.md`), hình, CSV từng wave cho từng chính sách |
 | `hoc_rl/` | Q-learning trên kho 4 ô, in từng bước, để hiểu RL. Kèm script kiểm tra MI = 0,918 |
