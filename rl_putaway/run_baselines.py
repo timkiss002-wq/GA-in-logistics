@@ -14,7 +14,7 @@ import numpy as np, pandas as pd
 from multiprocessing import Pool
 from env import PutawayEnv, BASELINES, run
 
-I = dict(np.load('inst.npz', allow_pickle=True)); S = np.load('s0.npz')
+I = dict(np.load('inst.npz', allow_pickle=True)); S = dict(np.load('s0.npz'))
 W_TEST = int(I['n_train']); N_TEST = len(I['wave_id']) - W_TEST
 SEEDS = range(5)
 LAMS = [round(x, 1) for x in np.arange(0, 1.01, 0.1)]

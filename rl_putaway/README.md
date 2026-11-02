@@ -10,31 +10,45 @@ Báo cáo đầy đủ nằm ở **[BAO_CAO_NGHIEN_CUU.md](BAO_CAO_NGHIEN_CUU.md
 
 ## Tóm tắt kết quả (2.913 wave kiểm tra, 18/07–19/10/2023)
 
+> **Cập nhật 02/11/2026.** Bản trước của README này kết luận "A tốt nhất ở λ = 0,3–0,7" và "lợi ích đến từ nhìn xa". Cả hai kết luận chỉ dựa trên 1 seed huấn luyện và **đã bị kết quả 3 seed bác bỏ**. Phần dưới đây thay thế hoàn toàn bản cũ. Chi tiết: [BAO_CAO_NGHIEN_CUU.md](BAO_CAO_NGHIEN_CUU.md), mục 5.2–5.3; Bảng 7 và 8 trong `results/bang_ket_qua.md`.
+
 **Hàm mục tiêu:** J = λ·MI/MI0 + (1−λ)·T/T0, lấy trung bình theo wave.
 - MI là Mixing Index của kho; T là độ dài lộ trình của wave.
-- Kho Random ổn định (S0) có J = 1 với mọi λ. J < 1 nghĩa là tốt hơn hiện trạng.
+- Kho Random ổn định (S0) có J ≈ 1 với mọi λ. J < 1 nghĩa là tốt hơn hiện trạng.
+- λ = 0 chỉ còn quãng đường (phía Gnone 2025); λ = 1 chỉ còn MI (phía de Assis 2026).
 
-| Chính sách (λ = 0,5) | MI | GRO / wave (300 wave) | J(0,5) |
+**Cách nhóm định vị đóng góp (hướng 1).** Đóng góp chính là (1) hàm mục tiêu J nối hai bài gốc và (2) một chính sách cất hàng học được, **điều kiện theo λ**: một mạng dùng chung cho mọi λ, khởi động bằng bắt chước danh mục heuristic (Nearest khi λ < 0,5, GreedyJ khi λ ≥ 0,5). PPO chỉ là bước tinh chỉnh; ablation cho thấy phần tinh chỉnh này đóng góp ít và không ổn định giữa các seed.
+
+| Chính sách (λ = 0,5) | MI | Lộ trình T / wave | J(0,5) |
 |---|---|---|---|
-| Random (hiện trạng) | 0,861 | 4.713 | 0,989 |
-| de Assis 2026, heuristic / supervised / adaptive | 0,634 / 0,641 / 0,660 | 4.139 / 4.139 / 4.172 | 0,800 / 0,805 / 0,819 |
-| Nearest (ô trống gần depot nhất) | 0,821 | 3.068 | 0,793 |
-| Turnover (hàng bán chạy vào ô gần) | 0,753 | 3.230 | 0,773 |
-| GreedyJ (giảm J tức thời) | 0,676 | 3.608 | 0,769 |
-| **Mô hình A (RL)** | 0,684 | 3.256 | **0,737** |
+| Random (hiện trạng) | 0,861 | 4.782 | 0,989 |
+| de Assis 2026, heuristic / supervised / adaptive | 0,634 / 0,641 / 0,660 | 4.220 / 4.224 / 4.259 | 0,800 / 0,805 / 0,819 |
+| Nearest (ô trống gần depot nhất) | 0,821 | 3.099 | 0,793 |
+| Turnover (hàng bán chạy vào ô gần) | 0,753 | 3.291 | 0,773 |
+| GreedyJ (giảm J tức thời) | 0,676 | 3.677 | 0,769 |
+| **Mô hình A, TB ± ĐLC 3 seed** | 0,707 ± 0,021 | 3.271 ± 61 | **0,745 ± 0,007** |
 
-**A tốt ở vùng cân bằng.** Với λ = 0,3–0,7, A có J thấp nhất (Wilcoxon cặp, hiệu chỉnh Holm, p < 10⁻²⁷). So với hiện trạng, A đi ngắn hơn 31% và giảm MI 21%.
+**A tốt ở đâu (3 seed).** So với heuristic tốt nhất tại từng λ:
+- λ = 0,3 / 0,4 / 0,5: J thấp hơn 0,013 / 0,021 / 0,024; cả 3 seed đều tốt hơn có ý nghĩa.
+- λ = 0,6: thấp hơn 0,009, 2/3 seed có ý nghĩa.
+- So với hiện trạng ở λ = 0,5: lộ trình ngắn hơn 32%, MI thấp hơn 18%.
 
-**Hạn chế ở hai đầu.**
-- Khi λ ≤ 0,1, Nearest thắng.
-- Khi λ ≥ 0,9, heuristic của de Assis thắng.
-- Ở λ = 0,2 và λ = 0,8, A không khác biệt có ý nghĩa với chính sách tốt nhất.
+**Hạn chế ở hai đầu.** Khi λ ≤ 0,2, Nearest bằng hoặc tốt hơn A. Khi λ ≥ 0,7, GreedyJ hoặc heuristic de Assis bằng hoặc tốt hơn A. Nói cách khác, ở hai đầu, quy tắc chuyên một mục tiêu vẫn thắng.
 
-**Ablation.**
-- Bỏ PPO thì J kém thêm 0,011.
-- PPO với γ = 0 (không nhìn xa) cũng kém đúng bằng mức đó. Vậy lợi ích đến từ việc học hậu quả trễ của quyết định cất hàng.
+**Ablation then chốt (3 seed, Δ = J biến thể − J của A, TB trên λ = 0,2/0,5/0,8; dương là kém hơn).**
 
-**Tái hiện de Assis 2026 chỉ được một phần.** MI ban đầu khớp và hướng thay đổi đúng, nhưng mức giảm MI lớn hơn bài. Đã thử độ nhạy với mọi tham số bài không công bố. Chi tiết ở `results/deassis2026/bang_tai_hien.md`.
+| Biến thể | Δ TB ± ĐLC | Kết luận |
+|---|---|---|
+| Bỏ PPO, chỉ bắt chước | +0,005 ± 0,005 | PPO giúp ít, không ổn định |
+| PPO với γ = 0 (không nhìn xa) | +0,000 ± 0,012 | Không có bằng chứng "nhìn xa" giúp ích |
+
+Các ablation khác (bỏ đặc trưng mixing, bỏ đường tắt ΔJ + khởi động, mạng riêng cho từng λ, bắt chước GreedyJ thay cho danh mục) hiện mới có 1 seed. Đang chạy lại với 3 seed; PR sẽ được cập nhật khi xong.
+
+**Tái hiện de Assis 2026 theo hai cách đọc.**
+- Cách đọc 1 (đúng chữ của bài) chỉ khớp một phần: mức giảm MI lớn hơn bài nhiều.
+- Cách đọc 2 (ngưỡng θ là sàn ở mức critical, lô chờ duyệt do người cất) khớp hình dạng kết quả của bài: MI lệch 0,016–0,028, tỷ lệ ô critical 99,4–99,8%.
+- Ở λ = 0,2–0,5, A tốt hơn de Assis theo **cả hai** cách đọc. Ở λ = 0,8, kết luận phụ thuộc cách đọc. Nhóm dùng cách đọc 1 (baseline mạnh hơn) cho so sánh chính.
+- Chi tiết: `results/deassis2026/bang_tai_hien.md`, `bang_cachdoc2.md`, `nguyen_nhan_lech.md`.
 
 ## Chuẩn bị dữ liệu
 
@@ -60,7 +74,9 @@ Các file trung gian `inst.npz`, `s0.npz`, `t0.json`, `tref.npy` và mô hình �
 | 8 | `python eval_gro.py results/picks_*.npz` | `results/gro_*.csv` (GRO trên 300 wave) |
 | 9 | `./run_ablation.sh` | `results/rl_ab*.csv` |
 | 10 | `python analyze.py` | `results/bang_ket_qua.md`, `results/fig*.png` |
-| R | `python deassis2026_repl.py && python deassis2026_repl.py --sens && python deassis2026_bang.py` | Tái hiện de Assis 2026 trong thiết lập gốc |
+| R | `python deassis2026_repl.py && python deassis2026_repl.py --sens && python deassis2026_bang.py` | Tái hiện de Assis 2026 trong thiết lập gốc (cách đọc 1) |
+| R2 | `python deassis2026_cachdoc2.py --calib && python deassis2026_cachdoc2.py` | Tái hiện theo cách đọc 2 |
+| S | `python rl_ppo.py train --tag main2_s1 --steps 400000 --bc 40000 --teacher portfolio --seed 1` (tương tự seed 2) | Các seed bổ sung của mô hình A |
 
 ## Cấu trúc
 
@@ -71,6 +87,6 @@ Các file trung gian `inst.npz`, `s0.npz`, `t0.json`, `tref.npy` và mô hình �
 | `tour_fast.py` | Độ dài lộ trình nhanh (NN + 2-opt) dùng làm reward. Khớp GRO với r = 0,996 (`check_tour.py`) |
 | `gro.py` | GRO của nhóm, giữ nguyên từ phần tái hiện Gnone 2025 |
 | `deassis2026_repl.py` | Tái hiện Algorithm 1 của de Assis 2026, kèm phân tích độ nhạy |
-| `models/` | `main2.pt` là mô hình A. Các file `ab*.pt` là các biến thể ablation |
+| `models/` | `main2*.pt` là mô hình A (seed 0, 1, 2). Các file `ab*.pt` là các biến thể ablation |
 | `results/` | Bảng (`bang_ket_qua.md`), hình, CSV từng wave cho từng chính sách |
 | `hoc_rl/` | Q-learning trên kho 4 ô, in từng bước, để hiểu RL. Kèm script kiểm tra MI = 0,918 |

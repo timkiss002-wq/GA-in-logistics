@@ -31,8 +31,9 @@ def per_wave(name):
 
 b = pd.read_csv(R + 'baselines.csv')
 b = b[b.policy != 'deAssis']          # bản rút gọn trước đây, đã thay bằng 3 chế độ đầy đủ (DA_*)
-if os.path.exists(R + 'baselines_deassis.csv'):
-    b = pd.concat([b, pd.read_csv(R + 'baselines_deassis.csv')[b.columns.intersection(pd.read_csv(R + 'baselines_deassis.csv').columns)]], ignore_index=True)
+for _f in ['baselines_deassis.csv', 'baselines_deassis2.csv']:      # 3 chế độ de Assis: cách đọc 1 (DA_) và 2 (DA2_)
+    if os.path.exists(R + _f):
+        _d = pd.read_csv(R + _f); b = pd.concat([b, _d[b.columns.intersection(_d.columns)]], ignore_index=True)
 g = b.groupby(['policy', 'lam'], dropna=False)[['MI_avg', 'Dr_avg', 'T_avg']].agg(['mean', 'std']).reset_index()
 g.columns = ['policy', 'lam', 'MI', 'MI_sd', 'Dr', 'Dr_sd', 'T', 'T_sd']
 rl = pd.concat([pd.read_csv(f) for f in sorted(glob.glob(R + 'rl_*.csv'))], ignore_index=True) \
@@ -78,7 +79,7 @@ if gro:
         x = d.dist.values; p = stats.wilcoxon(x, base).pvalue if k != 'Random' else np.nan
         out.append(f'| {k} | {x.mean():.1f} | {np.median(x):.1f} | {x.std(ddof=1):.1f} | {x.min():.1f} | {np.percentile(x, 25):.1f} | '
                    f'{np.percentile(x, 75):.1f} | {x.max():.1f} | {x.mean() / base.mean() - 1:+.1%} | {p:.1e} |')
-    keys = [k for k in ['Random', 'Nearest', 'Turnover', 'DA_heuristic', 'DA_supervised', 'DA_adaptive', 'GreedyJ_0.5', 'RL_main2_0.5'] if k in gro]
+    keys = [k for k in ['Random', 'Nearest', 'Turnover', 'DA_heuristic', 'DA_supervised', 'DA_adaptive', 'DA2_heuristic', 'DA2_supervised', 'DA2_adaptive', 'GreedyJ_0.5', 'RL_main2_0.5'] if k in gro]
     fr = stats.friedmanchisquare(*[gro[k].dist.values for k in keys])
     out.append(f'\nFriedman ({", ".join(keys)}): χ² = {fr.statistic:.1f}, p = {fr.pvalue:.1e}')
 
@@ -128,6 +129,73 @@ if all(os.path.exists(R + f'picks_{n}.npz') for n in names):
         h = per_wave(n); c = J(h[:, 0], h[:, 2], 0.5)
         out.append(f'| {n} | ' + ' | '.join(f'{c[mon == m].mean():.4f}' for m in ms) + ' |')
 
+# ---------- Bảng 6: mô hình A so với de Assis theo 2 cách đọc ----------
+if os.path.exists(R + 'baselines_deassis2.csv') and len(rl):
+    out.append('\n## Bảng 6. Mô hình A so với 3 chế độ de Assis 2026 theo hai cách đọc (J theo đúng λ; Wilcoxon cặp theo wave, Holm)\n')
+    out.append('| λ | Cách đọc | Chế độ de Assis | MI | T | J de Assis | J mô hình A | ΔJ (A − de Assis) | p Holm |\n|---|---|---|---|---|---|---|---|---|')
+    rows6 = []
+    for lam in [0.2, 0.5, 0.8]:
+        hr = per_wave(f'RL_main2_{lam}'); cr = J(hr[:, 0], hr[:, 2], lam)
+        for pref, rd in [('DA_', '1 – đúng chữ'), ('DA2_', '2 – θ ∈ [0,82; 0,88], lô chờ duyệt do người cất')]:
+            for m in ['heuristic', 'supervised', 'adaptive']:
+                hb = per_wave(pref + m); cb = J(hb[:, 0], hb[:, 2], lam)
+                rows6.append([lam, rd, m, hb[:, 0].mean(), hb[:, 2].mean(), cb.mean(), cr.mean(), cr.mean() - cb.mean(), stats.wilcoxon(cr, cb).pvalue])
+    adj6 = holm([x[-1] for x in rows6])
+    for x, pa in zip(rows6, adj6):
+        out.append(f'| {x[0]:.1f} | {x[1]} | {x[2]} | {x[3]:.4f} | {x[4]:.1f} | {x[5]:.4f} | {x[6]:.4f} | {x[7]:+.4f} | {pa:.1e} |')
+
+# ---------- Bảng 7: mô hình A qua nhiều seed huấn luyện ----------
+SEED_TAGS = [t for t in ['main2', 'main2_s1', 'main2_s2', 'main2_s3', 'main2_s4'] if t in set(rl.tag)]
+if len(SEED_TAGS) >= 2:
+    out.append(f'\n## Bảng 7. Mô hình A qua {len(SEED_TAGS)} seed huấn luyện (TB ± ĐLC giữa các seed; so với baseline tốt nhất ở từng λ, Wilcoxon cặp theo wave cho từng seed, Holm)\n')
+    out.append('| λ | MI | T | J(λ) mô hình A | baseline tốt nhất | J baseline | ΔJ TB ± ĐLC | số seed A tốt hơn có ý nghĩa / kém hơn có ý nghĩa |\n|---|---|---|---|---|---|---|---|')
+    tests = []; info = []
+    for lam in sorted(rl[rl.tag == 'main2'].lam):
+        best = None
+        for _, x in g.iterrows():
+            name = x.policy if np.isnan(x.lam) else f'GreedyJ_{x.lam}'
+            if x.policy == 'GreedyJ' and abs(x.lam - lam) > 1e-9: continue
+            j = J(x.MI, x['T'], lam)
+            if best is None or j < best[1]: best = (name, j)
+        hb = per_wave(best[0]); cb = J(hb[:, 0], hb[:, 2], lam)
+        mis, ts, js, ds = [], [], [], []
+        for t in SEED_TAGS:
+            h = per_wave(f'RL_{t}_{lam}'); c = J(h[:, 0], h[:, 2], lam)
+            mis.append(h[:, 0].mean()); ts.append(h[:, 2].mean()); js.append(c.mean()); ds.append(c.mean() - cb.mean())
+            tests.append((lam, np.sign(c.mean() - cb.mean()), stats.wilcoxon(c, cb).pvalue))
+        info.append((lam, mis, ts, js, best, ds))
+    adj = holm([x[2] for x in tests]); k = 0
+    for lam, mis, ts, js, best, ds in info:
+        better = worse = 0
+        for _ in SEED_TAGS:
+            sg, pa = tests[k][1], adj[k]; k += 1
+            if pa < 0.05: better += sg < 0; worse += sg > 0
+        out.append(f'| {lam:.1f} | {np.mean(mis):.4f} ± {np.std(mis, ddof=1):.4f} | {np.mean(ts):.1f} ± {np.std(ts, ddof=1):.1f} | '
+                   f'{np.mean(js):.4f} ± {np.std(js, ddof=1):.4f} | {best[0]} | {best[1]:.4f} | {np.mean(ds):+.4f} ± {np.std(ds, ddof=1):.4f} | {better} / {worse} |')
+
+# ---------- Bảng 8: ablation then chốt qua nhiều seed ----------
+AB = {'ab2_BConly': 'A không PPO (chỉ bắt chước)', 'ab2_gamma0': 'A với γ = 0 (không nhìn xa)'}
+pairs8 = []
+for i, base_t in enumerate(['main2', 'main2_s1', 'main2_s2']):
+    suf = '' if i == 0 else f'_s{i}'
+    for ab in AB:
+        if base_t in set(rl.tag) and ab + suf in set(rl.tag): pairs8.append((base_t, ab, ab + suf))
+if pairs8:
+    out.append('\n## Bảng 8. Ablation then chốt qua nhiều seed (Δ = J biến thể − J mô hình A cùng seed, TB trên λ = 0,2/0,5/0,8; dương = biến thể kém hơn)\n')
+    out.append('| Biến thể | số seed | Δ từng seed | Δ TB ± ĐLC |\n|---|---|---|---|')
+    for ab, d in AB.items():
+        ds = []
+        for base_t, a, tag in pairs8:
+            if a != ab: continue
+            vals = []
+            for lam in [0.2, 0.5, 0.8]:
+                x = rl[(rl.tag == tag) & (rl.lam == lam)]; y = rl[(rl.tag == base_t) & (rl.lam == lam)]
+                if len(x) and len(y): vals.append(J(x.MI_avg.iloc[0], x.T_avg.iloc[0], lam) - J(y.MI_avg.iloc[0], y.T_avg.iloc[0], lam))
+            ds.append(np.mean(vals))
+        if ds:
+            sd = np.std(ds, ddof=1) if len(ds) > 1 else float('nan')
+            out.append(f'| {d} | {len(ds)} | {", ".join(f"{x:+.4f}" for x in ds)} | {np.mean(ds):+.4f} ± {sd:.4f} |')
+
 # ---------- Pareto ----------
 pts = [(r.policy if np.isnan(r.lam) else f'GreedyJ_{r.lam}', r.MI, r['T']) for _, r in g.iterrows()]
 pts += [(f'RL_{r.tag}_{r.lam}', r.MI_avg, r.T_avg) for _, r in rl[rl.tag.isin(['main2'])].iterrows()]
@@ -148,15 +216,18 @@ gj = g[g.policy == 'GreedyJ'].sort_values('lam')
 ax.plot(gj.MI, gj['T'] / T0, 'o-', color='#4C78A8', label='GreedyJ, λ = 0 … 1')
 for _, r in gj.iterrows():
     ax.annotate(f'{r.lam:.1f}', (r.MI, r['T'] / T0), fontsize=7, xytext=(3, 3), textcoords='offset points', color='#4C78A8')
-for name, mk, c in [('Random', 's', '#888888'), ('Nearest', '^', '#E45756'), ('Turnover', 'D', '#54A24B'), ('DA_heuristic', 'v', '#B279A2'), ('DA_supervised', '<', '#9D755D'), ('DA_adaptive', '>', '#FF9DA6')]:
+for name, mk, c in [('Random', 's', '#888888'), ('Nearest', '^', '#E45756'), ('Turnover', 'D', '#54A24B'), ('DA_heuristic', 'v', '#B279A2'), ('DA_supervised', '<', '#9D755D'), ('DA_adaptive', '>', '#FF9DA6'), ('DA2_heuristic', 'X', '#B279A2'), ('DA2_adaptive', 'P', '#FF9DA6')]:
     r = g[g.policy == name].iloc[0]; ax.scatter(r.MI, r['T'] / T0, marker=mk, s=70, color=c, label=name, zorder=3)
-for tag, col, lab in [('main2', '#F58518', 'Mô hình A (RL), λ = 0 … 1'), ('main', '#FFBF79', 'A – chỉ bắt chước GreedyJ')]:
-    d = rl[rl.tag == tag].sort_values('lam')
-    if not len(d): continue
-    ax.plot(d.MI_avg, d.T_avg / T0, 'o--', label=lab, color=col, zorder=4)
-    if tag == 'main2':
-        for _, r in d.iterrows():
-            ax.annotate(f'{r.lam:.1f}', (r.MI_avg, r.T_avg / T0), fontsize=7, xytext=(3, -9), textcoords='offset points', color=col)
+_seeds = [t for t in ['main2', 'main2_s1', 'main2_s2', 'main2_s3', 'main2_s4'] if t in set(rl.tag)]
+if _seeds:
+    d = rl[rl.tag.isin(_seeds)].groupby('lam')[['MI_avg', 'T_avg']].agg(['mean', 'std']).reset_index().sort_values('lam')
+    col = '#F58518'
+    ax.errorbar(d[('MI_avg', 'mean')], d[('T_avg', 'mean')] / T0, xerr=d[('MI_avg', 'std')].fillna(0), yerr=d[('T_avg', 'std')].fillna(0) / T0,
+                fmt='o--', color=col, ecolor=col, elinewidth=.8, capsize=2, zorder=4,
+                label=f'Mô hình A (RL), TB ± ĐLC {len(_seeds)} seed, λ = 0 … 1')
+    for _, r in d.iterrows():
+        ax.annotate(f'{r["lam"].iloc[0] if hasattr(r["lam"], "iloc") else r["lam"]:.1f}', (r[('MI_avg', 'mean')], r[('T_avg', 'mean')] / T0),
+                    fontsize=7, xytext=(3, -9), textcoords='offset points', color=col)
 ax.set_xlabel('MI trung bình (thấp hơn = kho gọn hơn)'); ax.set_ylabel('T / T0 (thấp hơn = đi ngắn hơn)')
 ax.set_title('Đánh đổi mixing – quãng đường trên 2.913 wave kiểm tra'); ax.grid(alpha=.3); ax.legend(fontsize=8)
 fig.tight_layout(); fig.savefig(R + 'fig1_danh_doi.png', dpi=160)

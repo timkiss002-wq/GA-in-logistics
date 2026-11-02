@@ -215,13 +215,17 @@ class DeAssis2026:
     cho người duyệt được người vận hành cất theo cách hiện tại của công ty (ô trống ngẫu nhiên).
     Thành phần "cỡ" = cỡ giày của SKU; "cỡ có ở ô" = ô đang chứa bất kỳ đôi nào cùng cỡ.
     """
-    def __init__(self, mode, eps=0.01, omega=0.1, topk=5, lr=0.05, reg=0.01, w0=(1, 1, 1, 1, 1, -1)):
+    def __init__(self, mode, eps=0.01, omega=0.1, topk=5, lr=0.05, reg=0.01, w0=(1, 1, 1, 1, 1, -1),
+                 theta_min=None, theta_max=None):
+        # theta_min/theta_max: CÁCH ĐỌC 2 (results/deassis2026/nguyen_nhan_lech.md) – chỉ cất vào ô có
+        # theta_min <= MI_l sau <= theta_max; không có ô nào hợp lệ -> người vận hành cất ngẫu nhiên.
         self.mode, self.eps, self.omega, self.topk, self.lr, self.reg = mode, eps, omega, topk, lr, reg
+        self.theta_min, self.theta_max = theta_min, theta_max; self.no_cell = 0
         self.w0 = np.array(w0, float); self.w = self.w0.copy(); self.size_of = None
         self.deferred = 0
 
     def reset(self):
-        self.w = self.w0.copy(); self.deferred = 0
+        self.w = self.w0.copy(); self.deferred = 0; self.no_cell = 0
 
     def __call__(self, env, rng):
         if self.size_of is None:
@@ -235,13 +239,19 @@ class DeAssis2026:
         disp = (cr > 0).sum() / env.L
         X = np.stack([-dmi, (cr > 0).astype(float), size_ok, (env.cap - tot) / env.cap, 1 - mi_b, np.full(env.L, disp)], 1)
         U = X @ self.w if self.mode == 'adaptive' else -dmi + self.eps * size_ok
-        cand = np.flatnonzero(m); order = cand[np.argsort(-U[cand])]
+        cand = np.flatnonzero(m)
+        if self.theta_min is not None or self.theta_max is not None:
+            ok = m & (mi_a >= (self.theta_min or -1)) & (mi_a <= (self.theta_max or 2))
+            if not ok.any():
+                self.no_cell += 1; return int(rng.choice(cand))           # không có ô hợp lệ -> người cất
+            cand = np.flatnonzero(ok)
+        order = cand[np.argsort(-U[cand])]
         l = order[0]
         if rng.random() < self.omega:
             l = rng.choice(order[:self.topk])
         if self.mode == 'supervised' and dmi[l] > 1e-12:
             self.deferred += 1
-            return int(rng.choice(cand))                      # người vận hành cất ngẫu nhiên
+            return int(rng.choice(np.flatnonzero(m)))         # người vận hành cất ngẫu nhiên
         if self.mode == 'adaptive':
             xb = X[l] / (np.linalg.norm(X[l]) + 1e-12)
             self.w = self.w - self.lr * (2 * (self.w @ xb - (-dmi[l])) * xb + self.reg * self.w)
@@ -251,6 +261,8 @@ class DeAssis2026:
 BASELINES = {'Random': pol_random, 'Nearest': pol_nearest, 'Turnover': pol_turnover,
              'deAssis': pol_deassis, 'GreedyJ': pol_greedyJ}
 DA_MODES = {'DA_heuristic': 'heuristic', 'DA_supervised': 'supervised', 'DA_adaptive': 'adaptive'}
+DA2_MODES = {'DA2_heuristic': 'heuristic', 'DA2_supervised': 'supervised', 'DA2_adaptive': 'adaptive'}   # cách đọc 2
+DA2_THETA = (0.82, 0.88)
 
 
 def run(env, policy, w_start, n_waves, seed=0, state=None, lam=None, trace_every=0):

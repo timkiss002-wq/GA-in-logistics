@@ -4,6 +4,9 @@ MI0 = 0.8645 | T0 = 4866.9 (Random từ S0, wave huấn luyện)
 
 | Chính sách | λ | MI | T (lộ trình/wave) | T/T0 | D proxy/D0 | J(0,5) |
 |---|---|---|---|---|---|---|
+| DA2_adaptive |  | 0.7988 ± 0.0009 | 4750.6 ± 7.3 | 0.9761 | 1.1473 | 0.9501 |
+| DA2_heuristic |  | 0.8046 ± 0.0009 | 4738.6 ± 9.4 | 0.9736 | 1.1253 | 0.9522 |
+| DA2_supervised |  | 0.8322 ± 0.0008 | 4799.5 ± 13.1 | 0.9862 | 1.0694 | 0.9744 |
 | DA_adaptive |  | 0.6601 ± 0.0014 | 4258.6 ± 10.8 | 0.8750 | 1.0898 | 0.8193 |
 | DA_heuristic |  | 0.6335 ± 0.0015 | 4220.0 ± 16.1 | 0.8671 | 1.0843 | 0.7999 |
 | DA_supervised |  | 0.6409 ± 0.0012 | 4223.9 ± 21.7 | 0.8679 | 1.0640 | 0.8046 |
@@ -75,6 +78,9 @@ MI0 = 0.8645 | T0 = 4866.9 (Random từ S0, wave huấn luyện)
 
 | Chính sách | TB | Trung vị | ĐLC | Min | Q1 | Q3 | Max | so với Random | p |
 |---|---|---|---|---|---|---|---|---|---|
+| DA2_adaptive | 4691.3 | 4667.0 | 810.9 | 890.0 | 4243.5 | 5119.5 | 7414.0 | -0.5% | 5.8e-01 |
+| DA2_heuristic | 4640.1 | 4608.0 | 840.2 | 770.0 | 4165.5 | 5132.0 | 7076.0 | -1.5% | 2.3e-02 |
+| DA2_supervised | 4722.3 | 4736.0 | 815.8 | 102.0 | 4294.0 | 5199.5 | 6814.0 | +0.2% | 8.8e-01 |
 | DA_adaptive | 4172.1 | 4129.0 | 912.7 | 270.0 | 3727.0 | 4630.5 | 6700.0 | -11.5% | 1.4e-29 |
 | DA_heuristic | 4138.8 | 4107.0 | 929.5 | 850.0 | 3592.5 | 4647.0 | 6702.0 | -12.2% | 3.6e-27 |
 | DA_supervised | 4138.6 | 4154.0 | 927.5 | 814.0 | 3621.0 | 4669.5 | 6886.0 | -12.2% | 4.3e-29 |
@@ -115,7 +121,7 @@ MI0 = 0.8645 | T0 = 4866.9 (Random từ S0, wave huấn luyện)
 | Random | 4712.9 | 4706.0 | 880.2 | 662.0 | 4258.5 | 5227.5 | 7060.0 | +0.0% | nan |
 | Turnover | 3229.5 | 3416.0 | 1310.1 | 132.0 | 2399.0 | 4063.0 | 6390.0 | -31.5% | 2.4e-44 |
 
-Friedman (Random, Nearest, Turnover, DA_heuristic, DA_supervised, DA_adaptive, GreedyJ_0.5, RL_main2_0.5): χ² = 881.3, p = 5.2e-186
+Friedman (Random, Nearest, Turnover, DA_heuristic, DA_supervised, DA_adaptive, DA2_heuristic, DA2_supervised, DA2_adaptive, GreedyJ_0.5, RL_main2_0.5): χ² = 1482.8, p = 0.0e+00
 
 ## Bảng 4. Ablation study (J trên toàn bộ 2.913 wave kiểm tra; Δ so với gốc tương ứng; dương = kém hơn)
 
@@ -123,7 +129,11 @@ Friedman (Random, Nearest, Turnover, DA_heuristic, DA_supervised, DA_adaptive, G
 |---|---|---|---|---|---|---|
 | main2 | MÔ HÌNH A (đầy đủ): bắt chước heuristic tốt nhất theo λ + PPO 400k bước | 0.7079 | 0.7372 | 0.7609 | main | -0.0062 |
 | ab2_BConly | A nhưng KHÔNG PPO (chỉ bắt chước heuristic tốt nhất theo λ) | 0.7305 | 0.7494 | 0.7589 | main2 | +0.0110 |
+| ab2_BConly_s1 |  | 0.7024 | 0.7513 | 0.7789 | main2 | +0.0089 |
+| ab2_BConly_s2 |  | 0.7084 | 0.7543 | 0.7833 | main2 | +0.0133 |
 | ab2_gamma0 | A với γ = 0 (PPO nhưng không nhìn xa) | 0.7310 | 0.7497 | 0.7599 | main2 | +0.0116 |
+| ab2_gamma0_s1 |  | 0.6967 | 0.7487 | 0.7841 | main2 | +0.0078 |
+| ab2_gamma0_s2 |  | 0.6944 | 0.7368 | 0.7693 | main2 | -0.0018 |
 | main | A nhưng chỉ bắt chước GreedyJ (gốc so sánh cho các dòng dưới) + PPO 600k | 0.7334 | 0.7418 | 0.7493 | – | +0.0000 |
 | ab_BConly | chỉ bắt chước GreedyJ, KHÔNG PPO | 0.7327 | 0.7423 | 0.7428 | main | -0.0022 |
 | ab_gamma0 | γ = 0: không nhìn xa (chỉ reward tức thời) | 0.7341 | 0.7402 | 0.7432 | main | -0.0023 |
@@ -147,6 +157,52 @@ Friedman (Random, Nearest, Turnover, DA_heuristic, DA_supervised, DA_adaptive, G
 | GreedyJ_0.5 | 0.8310 | 0.7938 | 0.7679 | 0.7015 |
 | RL_main2_0.5 | 0.8055 | 0.7562 | 0.7300 | 0.6840 |
 
+## Bảng 6. Mô hình A so với 3 chế độ de Assis 2026 theo hai cách đọc (J theo đúng λ; Wilcoxon cặp theo wave, Holm)
+
+| λ | Cách đọc | Chế độ de Assis | MI | T | J de Assis | J mô hình A | ΔJ (A − de Assis) | p Holm |
+|---|---|---|---|---|---|---|---|---|
+| 0.2 | 1 – đúng chữ | heuristic | 0.6355 | 4199.1 | 0.8372 | 0.7079 | -0.1294 | 6.1e-253 |
+| 0.2 | 1 – đúng chữ | supervised | 0.6399 | 4217.7 | 0.8413 | 0.7079 | -0.1334 | 7.6e-279 |
+| 0.2 | 1 – đúng chữ | adaptive | 0.6608 | 4257.5 | 0.8527 | 0.7079 | -0.1448 | 0.0e+00 |
+| 0.2 | 2 – θ ∈ [0,82; 0,88], lô chờ duyệt do người cất | heuristic | 0.8046 | 4740.0 | 0.9653 | 0.7079 | -0.2574 | 0.0e+00 |
+| 0.2 | 2 – θ ∈ [0,82; 0,88], lô chờ duyệt do người cất | supervised | 0.8332 | 4802.9 | 0.9822 | 0.7079 | -0.2744 | 0.0e+00 |
+| 0.2 | 2 – θ ∈ [0,82; 0,88], lô chờ duyệt do người cất | adaptive | 0.7989 | 4758.1 | 0.9669 | 0.7079 | -0.2591 | 0.0e+00 |
+| 0.5 | 1 – đúng chữ | heuristic | 0.6355 | 4199.1 | 0.7989 | 0.7372 | -0.0617 | 1.2e-175 |
+| 0.5 | 1 – đúng chữ | supervised | 0.6399 | 4217.7 | 0.8034 | 0.7372 | -0.0662 | 5.8e-212 |
+| 0.5 | 1 – đúng chữ | adaptive | 0.6608 | 4257.5 | 0.8196 | 0.7372 | -0.0824 | 3.9e-289 |
+| 0.5 | 2 – θ ∈ [0,82; 0,88], lô chờ duyệt do người cất | heuristic | 0.8046 | 4740.0 | 0.9523 | 0.7372 | -0.2151 | 0.0e+00 |
+| 0.5 | 2 – θ ∈ [0,82; 0,88], lô chờ duyệt do người cất | supervised | 0.8332 | 4802.9 | 0.9753 | 0.7372 | -0.2381 | 0.0e+00 |
+| 0.5 | 2 – θ ∈ [0,82; 0,88], lô chờ duyệt do người cất | adaptive | 0.7989 | 4758.1 | 0.9509 | 0.7372 | -0.2137 | 0.0e+00 |
+| 0.8 | 1 – đúng chữ | heuristic | 0.6355 | 4199.1 | 0.7606 | 0.7609 | +0.0003 | 8.1e-01 |
+| 0.8 | 1 – đúng chữ | supervised | 0.6399 | 4217.7 | 0.7654 | 0.7609 | -0.0046 | 4.5e-13 |
+| 0.8 | 1 – đúng chữ | adaptive | 0.6608 | 4257.5 | 0.7864 | 0.7609 | -0.0256 | 5.8e-212 |
+| 0.8 | 2 – θ ∈ [0,82; 0,88], lô chờ duyệt do người cất | heuristic | 0.8046 | 4740.0 | 0.9394 | 0.7609 | -0.1785 | 0.0e+00 |
+| 0.8 | 2 – θ ∈ [0,82; 0,88], lô chờ duyệt do người cất | supervised | 0.8332 | 4802.9 | 0.9684 | 0.7609 | -0.2075 | 0.0e+00 |
+| 0.8 | 2 – θ ∈ [0,82; 0,88], lô chờ duyệt do người cất | adaptive | 0.7989 | 4758.1 | 0.9349 | 0.7609 | -0.1740 | 0.0e+00 |
+
+## Bảng 7. Mô hình A qua 3 seed huấn luyện (TB ± ĐLC giữa các seed; so với baseline tốt nhất ở từng λ, Wilcoxon cặp theo wave cho từng seed, Holm)
+
+| λ | MI | T | J(λ) mô hình A | baseline tốt nhất | J baseline | ΔJ TB ± ĐLC | số seed A tốt hơn có ý nghĩa / kém hơn có ý nghĩa |
+|---|---|---|---|---|---|---|---|
+| 0.0 | 0.7262 ± 0.0240 | 3212.5 ± 64.9 | 0.6601 ± 0.0133 | Nearest | 0.6368 | +0.0233 ± 0.0133 | 0 / 1 |
+| 0.1 | 0.7240 ± 0.0255 | 3233.0 ± 59.6 | 0.6816 ± 0.0083 | Nearest | 0.6681 | +0.0135 ± 0.0083 | 0 / 2 |
+| 0.2 | 0.7199 ± 0.0242 | 3247.5 ± 78.0 | 0.7003 ± 0.0074 | Nearest | 0.6993 | +0.0010 ± 0.0074 | 1 / 1 |
+| 0.3 | 0.7155 ± 0.0232 | 3265.9 ± 75.0 | 0.7180 ± 0.0045 | Nearest | 0.7306 | -0.0126 ± 0.0045 | 3 / 0 |
+| 0.4 | 0.7108 ± 0.0230 | 3273.7 ± 45.4 | 0.7325 ± 0.0063 | Turnover | 0.7539 | -0.0214 ± 0.0063 | 3 / 0 |
+| 0.5 | 0.7066 ± 0.0213 | 3271.2 ± 60.7 | 0.7448 ± 0.0066 | GreedyJ_0.5 | 0.7687 | -0.0238 ± 0.0066 | 3 / 0 |
+| 0.6 | 0.7012 ± 0.0211 | 3304.2 ± 82.4 | 0.7583 ± 0.0086 | GreedyJ_0.6 | 0.7677 | -0.0091 ± 0.0086 | 2 / 0 |
+| 0.7 | 0.6968 ± 0.0221 | 3327.2 ± 86.1 | 0.7693 ± 0.0129 | GreedyJ_0.7 | 0.7656 | +0.0041 ± 0.0129 | 1 / 2 |
+| 0.8 | 0.6917 ± 0.0206 | 3364.0 ± 77.1 | 0.7784 ± 0.0164 | DA_heuristic | 0.7597 | +0.0177 ± 0.0164 | 0 / 2 |
+| 0.9 | 0.6858 ± 0.0202 | 3423.1 ± 99.5 | 0.7843 ± 0.0190 | DA_heuristic | 0.7462 | +0.0364 ± 0.0190 | 0 / 3 |
+| 1.0 | 0.6754 ± 0.0176 | 3703.7 ± 219.5 | 0.7812 ± 0.0204 | DA_heuristic | 0.7328 | +0.0461 ± 0.0204 | 0 / 3 |
+
+## Bảng 8. Ablation then chốt qua nhiều seed (Δ = J biến thể − J mô hình A cùng seed, TB trên λ = 0,2/0,5/0,8; dương = biến thể kém hơn)
+
+| Biến thể | số seed | Δ từng seed | Δ TB ± ĐLC |
+|---|---|---|---|
+| A không PPO (chỉ bắt chước) | 3 | +0.0110, +0.0013, +0.0034 | +0.0052 ± 0.0051 |
+| A với γ = 0 (không nhìn xa) | 3 | +0.0116, +0.0003, -0.0118 | +0.0000 ± 0.0117 |
+
 Các điểm KHÔNG bị trội (Pareto) trong (MI, T): DA_heuristic (MI 0.633, T 4220), GreedyJ_1.0 (MI 0.635, T 4210), GreedyJ_0.9 (MI 0.652, T 3684), GreedyJ_0.8 (MI 0.661, T 3673), RL_main2_0.9 (MI 0.667, T 3524), RL_main2_0.8 (MI 0.671, T 3409), RL_main2_0.7 (MI 0.674, T 3402), RL_main2_0.6 (MI 0.679, T 3376), RL_main2_0.5 (MI 0.683, T 3328), RL_main2_0.4 (MI 0.685, T 3310), RL_main2_0.1 (MI 0.695, T 3295), RL_main2_0.0 (MI 0.699, T 3282), Nearest (MI 0.821, T 3099)
 
-Tương quan thứ hạng giữa proxy D/D0 và lộ trình thật T trên 17 baseline: Spearman ρ = 0.66
+Tương quan thứ hạng giữa proxy D/D0 và lộ trình thật T trên 20 baseline: Spearman ρ = 0.75

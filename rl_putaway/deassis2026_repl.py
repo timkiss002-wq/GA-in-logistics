@@ -82,8 +82,12 @@ def prepare(D, seed, n_events, free):
     rng = np.random.default_rng(seed)
     n, ns = D['n'].copy(), D['ns'].copy()
     k = int(round(free * len(D['units'])))
-    for l, a, b in D['units'][rng.choice(len(D['units']), k, replace=False)]:
-        n[l, a] -= 1; ns[l, b] -= 1
+    if D.get('free_mode', 'units') == 'cells':                       # biến thể: làm rỗng hẳn ~20% số ô
+        for l in rng.choice(D['L'], int(round(free * D['L'])), replace=False):
+            n[l] = 0; ns[l] = 0
+    else:
+        for l, a, b in D['units'][rng.choice(len(D['units']), k, replace=False)]:
+            n[l, a] -= 1; ns[l, b] -= 1
     ev_ref = rng.choice(D['R'], n_events, p=D['freq'])
     ev_size = np.array([rng.choice(D['S'], p=D['size_dist'][a]) for a in ev_ref])
     ev_u = rng.choice(D['qv'], n_events, p=D['qp'])
@@ -107,6 +111,8 @@ def run(D, mode, seed, P, trace_every=100):
             dmi = mi_a - mi_b
             ok = (a >= uu) & (mi_a <= P['theta'] + P['tol'])
             if P.get('size_hard'): ok &= (ns[:, s] > 0) | (tot == 0)     # biến thể: cỡ phải tương thích
+            if P.get('theta_min') is not None: ok &= mi_a >= P['theta_min']  # biến thể: ngưỡng là SÀN (MI sau >= θ)
+            if P.get('dmi_max') is not None and mode != 'supervised': ok &= dmi <= P['dmi_max']   # biến thể: không cất nếu ΔMI quá lớn
             disp = (n[:, i] > 0).sum() / L
             X = np.stack([-dmi, (n[:, i] > 0).astype(float), (ns[:, s] > 0).astype(float), a / C, 1 - mi_b,
                           np.full(L, disp)], 1)
