@@ -11,17 +11,85 @@ Ngày gom: 02/11/2026. Đây là bản **sao**: mọi file gốc vẫn nằm ngu
 
 ## Cấu trúc thư mục
 
-| Thư mục | Nội dung | Lên GitHub? |
-|---|---|---|
-| `01_bai_bao_goc/` | PDF các bài tham khảo (Gnone 2025, de Assis 2024/2026, dataset paper, Wanis 2026…) | Không (bản quyền) |
-| `02_data/` | Dữ liệu gốc `order_picking/` và 2 file Excel giải thích dữ liệu | Không (tải từ Mendeley) |
-| `03_tai_hien_GRO2024_Gnone2025/` | **Implement bài gốc 1:** GRO của de Assis et al. (2024) và thí nghiệm 4 chính sách lưu kho của Gnone et al. (2025), phương án chọn ô A/B/C, GA minh hoạ từng bước | Có (trừ `data/`) |
-| `04_RL_putaway_va_deAssis2026/` | **Implement bài gốc 2:** tái hiện de Assis et al. (2026), 2 cách đọc. **Mô hình chính của nhóm:** môi trường kho, hàm J, agent PPO (mô hình A), baseline, ablation, đánh giá lại bằng GRO | Có (trừ `data/` và `results/picks_*.npz`) |
-| `05_hoc_RL_kho_ti_hon/` | RL từ con số 0: Q-learning trên kho 4 ô, kiểm tra lại công thức MI | Có |
-| `06_du_lieu_va_wave_minh_hoa/` | Làm sạch dữ liệu, minh hoạ wave 33361 từng bước, hình nhu cầu và sản lượng | Có |
-| `07_ket_qua_tong_hop/` | Bảng Excel, hình và báo cáo đã tổng hợp (RL 01/11, tái hiện Gnone) | Có |
-| `08_bai_bao_nhap/` | Bản nháp bài báo IEEE (docx, pdf, zip Overleaf), Introduction cũ | Không (bài chưa công bố) |
-| `09_tai_lieu_tham_khao/` | File RIS để nhập Zotero | Có |
+Đọc nhanh: **03** = bài gốc 1 (GRO, Gnone 2025) · **04** = bài gốc 2 (de Assis 2026) + mô hình chính của nhóm (RL putaway) · **05–06** = tài liệu học và minh hoạ · **07** = kết quả đã tổng hợp để trình bày.
+
+```
+GA-in-logistics/
+├── README.md                          # File này: tổng quan, cấu trúc, mạch pitching, số liệu chính
+├── .gitignore                         # Loại dữ liệu gốc, bài báo, bản nháp, picks_*.npz
+│
+├── 03_tai_hien_GRO2024_Gnone2025/     # BÀI GỐC 1: GRO (de Assis 2024) + 4 chính sách lưu kho (Gnone 2025)
+│   ├── README.md                      #   cách chạy + giả định của nhóm
+│   ├── requirements.txt
+│   ├── data/                          #   (trống trên GitHub) đặt order_picking/ từ Mendeley vào đây
+│   ├── data.py                        #   đọc ô kệ, 4 file chính sách, wave; tính MI
+│   ├── gro.py                         #   mô hình khoảng cách theo lối đi; GA + DP + 2-opt
+│   ├── instances.py                   #   ghép wave với bố trí kho
+│   ├── ga_6_buoc.py, ga_tu_hoc.py     #   GA nhỏ 4–8 ô, in từng bước B1–B6 (để học/trình bày)
+│   ├── tai_hien_gro2024.py            #   tái hiện GRO 2024 trên 51 pick list thật
+│   ├── tai_hien_gnone2025.py          #   tái hiện Gnone 2025 (kiemtra | demo | full | thongke)
+│   ├── bang_nhu_bai_bao.py            #   xuất bảng giống bài báo (txt, xlsx)
+│   ├── chan_doan_gnone2025.py         #   chẩn đoán vì sao lệch so với bài
+│   ├── chay_C_10seed.py, chay_C_wave_bien_doi.py   # phương án C (WMS gán sẵn ô)
+│   ├── ve_boxplot_phan_tram.py
+│   ├── CAU_HOI_CHO_MENTOR.md
+│   └── results/                       #   csv/txt/log/png: bảng 3, boxplot, scatter, bảng 5 GRO 2024
+│
+├── 04_RL_putaway_va_deAssis2026/      # BÀI GỐC 2 + MÔ HÌNH CHÍNH CỦA NHÓM
+│   ├── README.md                      #   quy trình 10 bước chạy lại từ đầu
+│   ├── BAO_CAO_NGHIEN_CUU.md          #   báo cáo: gap, hàm J, kết quả, hạn chế
+│   ├── data/                          #   (trống trên GitHub) đặt order_picking/ từ Mendeley vào đây
+│   │
+│   │   # --- Chuẩn bị dữ liệu và trạng thái ban đầu (bước 1–3) ---
+│   ├── data_prep.py                   #   dựng kho 1.692 ô, 2.454 SKU, chia wave 70/30  → inst.npz
+│   ├── make_s0.py                     #   chạy Random 2.000 wave → kho ổn định         → s0.npz
+│   ├── make_t0.py, make_tref.py       #   T0 và T_ref(w) để chuẩn hoá reward           → t0.json, tref.npy
+│   │
+│   │   # --- Môi trường, khoảng cách, agent (bước 4–7) ---
+│   ├── env.py                         #   môi trường kho: lấy hàng, nhập bù, MI, D, reward; 5 baseline
+│   ├── test_env.py                    #   6 kiểm thử (tổng reward = −J)
+│   ├── tour_fast.py, check_tour.py    #   lộ trình nhanh NN + 2-opt, kiểm định so với GRO (r = 0,996)
+│   ├── gro.py, eval_gro.py            #   GRO và đo lại quãng đường trên 300 wave kiểm tra
+│   ├── run_baselines.py               #   Random, Nearest, Turnover, GreedyJ(λ)…
+│   ├── rl_ppo.py                      #   agent PPO (train / eval), điều kiện theo λ
+│   ├── run_ablation.sh                #   chạy ablation
+│   ├── analyze.py, analyze_huong1.py  #   bảng, kiểm định Wilcoxon–Holm, hình
+│   │
+│   │   # --- Tái hiện de Assis 2026 ---
+│   ├── run_deassis_env.py, deassis2026_repl.py      # cách đọc 1
+│   ├── deassis2026_cachdoc2.py                      # cách đọc 2
+│   ├── deassis2026_giathuyet.py, deassis2026_bang.py
+│   │
+│   ├── models/                        #   mô hình đã huấn luyện (.pt + .json): main, main2_s0..s4, ab_*, ab2_*, ab3_*
+│   └── results/
+│       ├── huong1/                    #   ★ KẾT QUẢ CHÍNH: 5 seed, bảng 7, ablation bảng 9, hình đánh đổi
+│       ├── deassis2026/               #   bảng tái hiện 2 cách đọc, nguyên nhân lệch, hình
+│       ├── bang_ket_qua.md, fig1–3_*.png
+│       ├── baselines*.csv
+│       ├── rl_*.csv                   #   kết quả RL theo λ (proxy D)
+│       └── gro_*.csv                  #   kết quả đo lại bằng GRO
+│                                      #   (picks_*.npz ~37 MB không lên GitHub, sinh lại bằng bước 7)
+│
+├── 05_hoc_RL_kho_ti_hon/              # Học RL từ số 0: Q-learning kho 4 ô, kiểm tra công thức MI
+│   ├── README.md                      #   kèm 5 bài tập tự làm
+│   ├── rl_ti_hon.py, kiem_tra_MI.py
+│   └── ket_qua_*.txt, xem_tung_buoc_lambda_0.5.txt
+│
+├── 06_du_lieu_va_wave_minh_hoa/       # Làm sạch dữ liệu + minh hoạ wave 33361 từng bước
+│   ├── clean_data.py, wave_33361_replay.py
+│   ├── wave_33361_tung_buoc.xlsx
+│   └── pareto_nhu_cau.png, san_luong_theo_thang.png
+│
+├── 07_ket_qua_tong_hop/               # Bản tổng hợp để trình bày (bản sao từ results/)
+│   ├── RL_putaway_2026-11-01/         #   báo cáo, Bang_ket_qua_RL.xlsx, Hình 1–5
+│   └── tai_hien_Gnone2025/            #   bang_nhu_bai_bao.xlsx, boxplot, scatter
+│
+└── 09_tai_lieu_tham_khao/             # File .ris để nhập Zotero (bài gốc, dữ liệu, SLAP nền tảng, khác)
+```
+
+**Chỉ có trên máy, không đưa lên GitHub:** `01_bai_bao_goc/` (PDF bài tham khảo, bản quyền), `02_data/` (dữ liệu gốc, tải từ Mendeley `pf2w725pw3`), `08_bai_bao_nhap/` (bản nháp IEEE, chưa công bố).
+
+**Nên đọc theo thứ tự:** `README.md` này → `05_.../README.md` (hiểu RL và J trên kho tí hon) → `03_.../README.md` → `04_.../README.md` → `04_.../results/huong1/KET_QUA_HUONG1.md`.
 
 ---
 
