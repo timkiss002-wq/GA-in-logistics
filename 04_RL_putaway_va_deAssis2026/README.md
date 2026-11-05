@@ -16,6 +16,8 @@ Dữ liệu: kho giày dép (de Assis et al., 2025, *Data in Brief*). Nền tả
 | 8 | `python eval_gro.py results/picks_*.npz` | Đo bằng GRO trên 300 wave kiểm tra | `results/gro_*.csv` |
 | 9 | `./run_ablation.sh` | Ablation study | `results/rl_ab_*.csv` |
 | 10 | `python analyze.py` | Bảng, kiểm định, hình | `results/bang_ket_qua.md`, `fig*.png` |
+| 11 | `python t32_linear.py --lam 0.4 --seed 0` (λ 0,3/0,4/0,5 × seed 0–4) | T3.2: luật tuyến tính trên 10 đặc trưng của 64 ô ứng viên, tìm w ngẫu nhiên riêng cho từng λ (khoảng 22 phút/lần) | `results/t32/row_*.csv`, `trace_*.csv` |
+| 12 | `python t32_compare.py` | So T3.2 với Model A (cùng seed) và GreedyJ: Wilcoxon cặp theo wave, Holm | `results/t32/so_sanh_T32.csv` |
 
 Phụ thuộc: numpy, pandas, scipy, matplotlib, numba, torch (bản CPU là đủ). `data/` trỏ tới thư mục `02_data/order_picking`.
 
@@ -28,3 +30,5 @@ Phụ thuộc: numpy, pandas, scipy, matplotlib, numba, torch (bản CPU là đ�
 | `gro.py` | GRO của nhóm, giữ nguyên từ `slap_gro_v2` |
 | `rl_ppo.py` | Agent PPO: chấm điểm 64 ô ứng viên, mặt nạ, dùng chung cho mọi λ |
 | `check_tour.py` | Kiểm định `tour_fast` so với GRO |
+| `t32_linear.py` | Baseline T3.2: luật tuyến tính, dùng lại `candidates` của `rl_ppo.py` |
+| `t32_compare.py` | Bảng so sánh T3.2 / Model A / GreedyJ |
