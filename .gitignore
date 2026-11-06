@@ -11,3 +11,6 @@
 04_RL_putaway_va_deAssis2026/results/picks_*.npz
 __pycache__/
 ~$*
+# Kết quả LP-RL sinh lại được (python lp_rl.py eval), log huấn luyện
+04_RL_putaway_va_deAssis2026/results/lp/picks_*.npz
+04_RL_putaway_va_deAssis2026/logs_lp/
