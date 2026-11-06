@@ -18,6 +18,7 @@ from robust_env import RobustEnv
 from env import BASELINES, DeAssis2026, DA_MODES
 import lp_rl
 from lp_rl import I, S, W_TEST, N_TEST, LAMS
+from lit_rules import LIT
 
 OUT = 'results/v7'
 SCEN = {'base': {}, 'pick_random': dict(pick='random'), 'pick_top2': dict(pick='top2'),
@@ -39,6 +40,8 @@ def run_job(scen, policy, lam, seed):
         act = lambda e, r: int(np.argmax(pol.scores(e)[1]))
     elif policy in BASELINES:
         act = BASELINES[policy]
+    elif policy in LIT:
+        act = LIT[policy]
     else:
         act = DeAssis2026(DA_MODES[policy]); act.reset()
     t = time.time(); env.reset(W_TEST, N_TEST, None, lam)
@@ -65,6 +68,8 @@ def jobs(group):
             J += [(sc, p, 0.5, 0) for p in lp]
             J += [(sc, 'Random', 0.5, s) for s in range(2)] + [(sc, p, 0.5, 0) for p in ['Nearest', 'Turnover', 'GreedyJ']]
             J += [(sc, 'DA_heuristic', 0.5, s) for s in range(2)]
+    if group == 'lit':                # luật đại diện cho các dòng nghiên cứu hiện có (lit_rules.py)
+        J += [('base', 'ABC', 0.5, s) for s in range(3)] + [('base', p, 0.5, 0) for p in ['Correlated', 'Scattered']]
     if group == 'retrained':          # chính sách học lại trong kịch bản tương ứng / θ riêng theo λ / không Tref
         J += [('pick_random', f'LP:lpR_s{s}', 0.5, 0) for s in range(3)]
         for lf in ['0.0', '0.5', '1.0']:
