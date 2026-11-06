@@ -2,9 +2,9 @@
 import pandas as pd, matplotlib as mpl, matplotlib.pyplot as plt
 mpl.rcParams.update({'font.family': 'serif', 'mathtext.fontset': 'cm', 'font.size': 8})
 d = pd.read_csv('results/v7/compare_all.csv')
-fig, ax = plt.subplots(figsize=(3.45, 2.9))
-pts = [('Random', 'Random (current)', 's', '#888780'), ('Nearest', 'Nearest', '^', '#2a78d6'), ('ABC', 'ABC class-based', 'v', '#2a78d6'),
-       ('Turnover', 'Turnover', 'D', '#2a78d6'), ('Scattered', 'Scattered', 'P', '#1baf7a'), ('Correlated', 'Correlated', 'X', '#eda100'),
+fig, ax = plt.subplots(figsize=(3.45, 3.2))
+pts = [('Random', 'Random (current)', 's', '#888780'), ('Nearest', 'Nearest', '^', '#2a78d6'), ('Gnone-Class', 'Gnone class', 'v', '#1baf7a'), ('Gnone-Ded', 'Gnone dedicated', '<', '#1baf7a'), ('Gnone-Hyb', 'Gnone hybrid', '>', '#1baf7a'),
+       ('Turnover', 'Turnover', 'D', '#2a78d6'), ('WB-Scatter', 'Weidinger-Boysen', 'P', '#008300'), ('Wanis-Score', 'Wanis score', 'X', '#eda100'),
        ('deAssis heuristic', 'de Assis heur.', 'o', '#e87ba4'), ('deAssis supervised', 'de Assis sup.', 'h', '#e87ba4'),
        ('deAssis adaptive', 'de Assis adapt.', 'p', '#e87ba4')]
 for k, lab, mk, c in pts:
@@ -17,5 +17,5 @@ for k, lab, c, ls in [('GreedyJ', r'GreedyJ ($\lambda$=0..1)', '#eb6834', '--'),
 ax.set_xlabel('route length per wave $T$ (dataset units)'); ax.set_ylabel('mixing index $MI$')
 for s in ['top', 'right']: ax.spines[s].set_visible(False)
 ax.grid(color='#e1e0d9', lw=0.5); ax.set_axisbelow(True)
-ax.legend(fontsize=5.6, ncol=2, frameon=False, loc='upper center', bbox_to_anchor=(0.5, -0.27))
+ax.legend(fontsize=5.6, ncol=2, frameon=False, loc='upper center', bbox_to_anchor=(0.5, -0.25))
 fig.tight_layout(); fig.savefig('results/v7/fig_tradeoff.pdf'); fig.savefig('results/v7/fig_tradeoff.png', dpi=170)

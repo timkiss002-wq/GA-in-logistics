@@ -19,6 +19,8 @@ from env import BASELINES, DeAssis2026, DA_MODES
 import lp_rl
 from lp_rl import I, S, W_TEST, N_TEST, LAMS
 from lit_rules import LIT
+from lit_methods import LIT2
+LIT = {**LIT, **LIT2}
 
 OUT = 'results/v7'
 SCEN = {'base': {}, 'pick_random': dict(pick='random'), 'pick_top2': dict(pick='top2'),
@@ -70,6 +72,9 @@ def jobs(group):
             J += [(sc, 'DA_heuristic', 0.5, s) for s in range(2)]
     if group == 'lit':                # luật đại diện cho các dòng nghiên cứu hiện có (lit_rules.py)
         J += [('base', 'ABC', 0.5, s) for s in range(3)] + [('base', p, 0.5, 0) for p in ['Correlated', 'Scattered']]
+    if group == 'lit2':               # phương pháp đã công bố (lit_methods.py)
+        J += [('base', p, 0.5, s) for p in ['Gnone-Class', 'Gnone-Hyb'] for s in range(3)]
+        J += [('base', p, 0.5, 0) for p in ['Gnone-Ded', 'WB-Scatter', 'Wanis-Score']]
     if group == 'retrained':          # chính sách học lại trong kịch bản tương ứng / θ riêng theo λ / không Tref
         J += [('pick_random', f'LP:lpR_s{s}', 0.5, 0) for s in range(3)]
         for lf in ['0.0', '0.5', '1.0']:

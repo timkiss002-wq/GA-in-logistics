@@ -40,7 +40,7 @@ def method_stats(scen, name, lam=0.5):
         rows = [stats(z, lam) for s in range(5) if (z := load(scen, f'LP:lp_s{s}', lam)) is not None]
     elif name == 'GreedyJ':
         rows = [stats(z, lam) for z in [load(scen, 'GreedyJ', lam)] if z is not None]
-    elif name in ('Random', 'DA_heuristic', 'DA_supervised', 'DA_adaptive', 'ABC'):
+    elif name in ('Random', 'DA_heuristic', 'DA_supervised', 'DA_adaptive', 'Gnone-Class', 'Gnone-Hyb'):
         rows = [stats(z, lam) for s in range(5) if (z := load(scen, name, 0.5, s)) is not None]
     else:
         rows = [stats(z, lam) for z in [load(scen, name, 0.5)] if z is not None]
@@ -56,7 +56,7 @@ def tau(st, ref, a=0.5, b=0.2, model='mi'):
     return a * st['Tsum'] / ref['Tsum'] + b * S / SR + (1 - a - b)
 
 
-METHODS = ['Random', 'Nearest', 'ABC', 'Turnover', 'Scattered', 'Correlated', 'GreedyJ', 'DA_heuristic', 'DA_supervised', 'DA_adaptive', 'LP-RL']
+METHODS = ['Random', 'Nearest', 'Turnover', 'Gnone-Class', 'Gnone-Ded', 'Gnone-Hyb', 'WB-Scatter', 'Wanis-Score', 'GreedyJ', 'DA_heuristic', 'DA_supervised', 'DA_adaptive', 'LP-RL']
 
 # ---------------- 1. thời gian lấy hàng ----------------
 ref = method_stats('base', 'Random')

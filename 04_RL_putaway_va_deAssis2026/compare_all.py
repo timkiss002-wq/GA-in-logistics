@@ -1,10 +1,11 @@
 """
 Bài v7b – BẢNG SO SÁNH ĐẦY ĐỦ: LP-RL với MỌI phương pháp hiện có, ở mọi λ (trên 2.913 wave kiểm tra, cùng S0).
-Nhóm phương pháp:
+Nhóm phương pháp (bản v7c: chỉ phương pháp đã công bố, xem lit_methods.py):
   hiện trạng      : Random
-  luật cổ điển    : Nearest (closest open location), ABC class-based, Turnover (volume-based động)
-  dòng mixed-shelves: Scattered (rải hàng, Weidinger & Boysen 2018)
-  dòng tương quan : Correlated (Wanis et al. 2026)
+  luật cổ điển    : Nearest = closest open location, Turnover = full-turnover (Hausman et al. 1976)
+  Gnone et al. 2025: Class-Based, Dedicated, Hybrid (dùng file chính sách bài công bố)
+  mixed-shelves   : Weidinger & Boysen 2018 (min-max khoảng cách tới điểm đo)
+  Wanis et al. 2026: điểm Stage 2 (tương quan + entropy + khoảng cách, trọng số Taguchi-best)
   dòng trộn hàng  : de Assis 2026 heuristic / supervised / adaptive
   tham lam theo J : GreedyJ
   deep RL         : mạng nơ-ron xếp hạng 64 ô rồi chọn, bắt chước + PPO (kiểu Pan et al. 2025; rl_ppo.py, 5 seed)
@@ -35,7 +36,7 @@ fixed = {'Random': 'Random', 'Nearest': 'Nearest', 'Turnover': 'Turnover',
 for lab, f in fixed.items():
     hs = [np.load(x) for x in sorted(glob.glob(f'results/lp/base_{f}_s*.npy'))]
     H[lab] = lambda lam, hs=hs: hs
-for lab in ['ABC', 'Correlated', 'Scattered']:
+for lab in ['Gnone-Class', 'Gnone-Ded', 'Gnone-Hyb', 'WB-Scatter', 'Wanis-Score']:
     hs = [np.load(x)['hist'] for x in sorted(glob.glob(f'results/v7/base/{lab}_0.5_s*.npz'))]
     H[lab] = lambda lam, hs=hs: hs
 H['GreedyJ'] = lambda lam: [np.load(f'results/lp/base_GreedyJ_{lam}_s0.npy')]
@@ -45,8 +46,8 @@ deep = []
 for f in ['results/rl_main2.csv'] + [f'results/rl_main2_s{s}.csv' for s in range(1, 5)]:
     d = pd.read_csv(f); deep.append({round(r.lam, 1): (r.MI_avg, r.T_avg) for r in d.itertuples()})
 
-ORDER = ['Random', 'Nearest', 'ABC', 'Turnover', 'Scattered', 'Correlated', 'deAssis heuristic', 'deAssis supervised',
-         'deAssis adaptive', 'GreedyJ', 'Deep RL (rank+assign)', 'LP-RL']
+ORDER = ['Random', 'Nearest', 'Turnover', 'Gnone-Class', 'Gnone-Ded', 'Gnone-Hyb', 'WB-Scatter', 'Wanis-Score',
+         'deAssis heuristic', 'deAssis supervised', 'deAssis adaptive', 'GreedyJ', 'Deep RL (rank+assign)', 'LP-RL']
 rows, tests = [], []
 for lam in LAMS:
     lp = [cw(h, lam) for h in H['LP-RL'](lam)]

@@ -1,4 +1,5 @@
 """
+KHÔNG DÙNG TRONG BÀI (bản v7c thay bằng lit_methods.py – phương pháp đã công bố). Giữ lại để truy vết.
 Bài v7b – các luật cất hàng ĐẠI DIỆN cho các dòng nghiên cứu hiện có (để so sánh LP-RL với "phương pháp hiện tại").
 Các luật này là phiên bản trực tuyến (từng đơn vị hàng về) dựng theo ý tưởng của bài gốc, không phải tái hiện y nguyên.
 

@@ -4,9 +4,9 @@ import matplotlib as mpl; import matplotlib.pyplot as plt
 mpl.rcParams.update({'font.family': 'serif', 'mathtext.fontset': 'cm', 'font.size': 8})
 S = json.load(open('results/v7/summary_v7.json'))['time_lam05']
 lab = {'Random': 'Random (current)', 'Nearest': 'Nearest', 'Turnover': 'Turnover', 'GreedyJ': 'GreedyJ',
-       'DA_heuristic': 'de Assis heur.', 'DA_supervised': 'de Assis sup.', 'DA_adaptive': 'de Assis adapt.', 'LP-RL': 'LP-RL', 'ABC': 'ABC class-based', 'Scattered': 'Scattered', 'Correlated': 'Correlated'}
+       'DA_heuristic': 'de Assis heur.', 'DA_supervised': 'de Assis sup.', 'DA_adaptive': 'de Assis adapt.', 'LP-RL': 'LP-RL', 'Gnone-Class': 'Gnone class-based', 'Gnone-Ded': 'Gnone dedicated', 'Gnone-Hyb': 'Gnone hybrid', 'WB-Scatter': 'Weidinger-Boysen', 'Wanis-Score': 'Wanis score'}
 rows = sorted(S, key=lambda r: -r['tau'])
-fig, ax = plt.subplots(figsize=(3.4, 2.6))
+fig, ax = plt.subplots(figsize=(3.4, 3.0))
 for i, r in enumerate(rows):
     tr, se, ot = 0.5 * (1 - r['dT']), 0.2 * (1 - r['dS']), 0.3
     x = 0
