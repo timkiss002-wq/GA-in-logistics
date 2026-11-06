@@ -20,9 +20,9 @@ s_t = Φ_t θ ∈ R^N        điểm của các ô
 π_t = softmax(s_t trên các ô còn chỗ)     -> huấn luyện: bốc ô theo π_t; kiểm tra: lấy ô điểm cao nhất
 ```
 
-## Cách học θ (RL) – ba chi tiết quyết định kết quả
+## Cách học θ (RL)
 
-1. **Tách reward.** Phần trộn hàng được ghi nhận ngay ở quyết định gây ra nó: r_t = −λ/MI0 · ΔMI_t · (số wave còn lại) + (1−λ)(1 − T_w/T0) khi wave w được lấy. Không chiết khấu thì tổng reward y hệt reward theo wave (chỉ dời thời điểm). Không có bước này, trọng số các đặc trưng trộn hàng đổi dấu giữa các lần chạy.
+1. **Tách reward.** Phần trộn hàng được ghi nhận ngay ở quyết định gây ra nó: r_t = −λ/MI0 · ΔMI_t · (số wave còn lại) + (1−λ)(1 − T_w/T0) khi wave w được lấy. Không chiết khấu thì tổng reward y hệt reward theo wave (chỉ dời thời điểm). Trong các lần chạy thử ban đầu (chưa có 8 kho song song và khởi động lại), thiếu bước này thì trọng số đặc trưng trộn hàng đổi dấu giữa các lần chạy. Ở thiết lập cuối, ablation cho thấy reward theo wave cho J tương đương (tốt hơn ở λ thấp, kém hơn ở λ = 0,8).
 2. **8 kho mô phỏng chạy song song.** Mỗi lô 4.096 quyết định = 512 quyết định × 8 kho, mỗi kho một đoạn wave và một λ riêng → mỗi lần cập nhật luôn thấy nhiều λ.
 3. **Khởi động lại, chọn theo tập kiểm định.** Mỗi lần huấn luyện chạy 3 lần ngắn (100.000 quyết định) từ θ = 0. Nếu không lần nào tốt hơn θ = 0 trên tập kiểm định thì chạy thêm 3 lần (tối đa 3 vòng). Lần tốt nhất được học tiếp 300.000 quyết định. Phần lớn các lần ngắn trôi về vùng xấu (ưu tiên gom hàng, bỏ quên quãng đường) trước khi học được tín hiệu quãng đường, nên bước này là cần thiết.
 
