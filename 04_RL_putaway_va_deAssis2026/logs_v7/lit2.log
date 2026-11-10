@@ -1,0 +1,10 @@
+base WB-Scatter λ=0.5 s0: 23s, 0.27 ms/quyết định
+base Gnone-Hyb λ=0.5 s2: 5s, 0.02 ms/quyết định
+base Gnone-Hyb λ=0.5 s1: 5s, 0.02 ms/quyết định
+base Gnone-Hyb λ=0.5 s0: 5s, 0.02 ms/quyết định
+base Gnone-Ded λ=0.5 s0: 7s, 0.02 ms/quyết định
+base Gnone-Class λ=0.5 s2: 6s, 0.03 ms/quyết định
+base Gnone-Class λ=0.5 s1: 5s, 0.02 ms/quyết định
+base Gnone-Class λ=0.5 s0: 5s, 0.02 ms/quyết định
+base Wanis-Score λ=0.5 s0: 1794s, 26.82 ms/quyết định
+DONE
