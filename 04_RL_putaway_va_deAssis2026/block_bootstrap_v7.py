@@ -3,6 +3,8 @@ Cho mỗi λ, mỗi seed LP-RL và mỗi phương pháp có dữ liệu từng w
 c_w(LP-RL) − c_w(phương pháp), lấy mẫu lại theo khối B wave liên tiếp (B = 25, 100, 300), 2.000 lần.
 "Có ý nghĩa" = khoảng tin cậy không chứa 0, hiệu chỉnh Bonferroni trên mọi phép so sánh. Ghi results/v7/block_bootstrap.json."""
 import glob, json, numpy as np
+import os; LPT = os.environ.get('LPTAG', 'lp'); SUF = '' if LPT == 'lp' else '_' + LPT   # v9: LPTAG=lpS -> cấu hình gọn
+
 from lp_rl import LAMS, MI0, T0
 cw = lambda h, l: l * h[:, 0] / MI0 + (1 - l) * h[:, 2] / T0
 fixed = {'Random': 'results/lp/base_Random_s*.npy', 'Nearest': 'results/lp/base_Nearest_s*.npy', 'Turnover': 'results/lp/base_Turnover_s*.npy',
@@ -18,7 +20,7 @@ def ci(d, B, alpha):
     m = d[idx].mean(1); return np.quantile(m, [alpha / 2, 1 - alpha / 2])
 comps = []
 for lam in LAMS:
-    lp = [cw(np.load(f'results/v7/base/LP-lp_s{s}_{float(lam)}_s0.npz')['hist'], lam) for s in range(5)]
+    lp = [cw(np.load(f'results/v7/base/LP-{LPT}_s{s}_{float(lam)}_s0.npz')['hist'], lam) for s in range(5)]
     meths = dict(H); meths['GreedyJ'] = [np.load(f'results/lp/base_GreedyJ_{lam}_s0.npy')]
     for m, hs in meths.items():
         base = np.mean([cw(h, lam) for h in hs], 0)
@@ -37,4 +39,4 @@ for B in [25, 100, 300]:
     for lam in [0.0, 0.1, 0.9, 1.0]:
         rr = [r for r in res if r['lam'] == lam]
         print('   λ', lam, 'tốt hơn', sum(r['better'] for r in rr), 'kém hơn', sum(r['worse'] for r in rr), 'không rõ', sum(not r['better'] and not r['worse'] for r in rr), '/', len(rr))
-json.dump(dict(n=len(comps), R=R, bonferroni_alpha=alpha, res=out), open('results/v7/block_bootstrap.json', 'w'))
+json.dump(dict(n=len(comps), R=R, bonferroni_alpha=alpha, res=out), open(f'results/v7/block_bootstrap{SUF}.json', 'w'))

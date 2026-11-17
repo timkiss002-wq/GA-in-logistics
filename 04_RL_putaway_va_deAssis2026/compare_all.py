@@ -18,6 +18,8 @@ import glob, json, os
 import numpy as np, pandas as pd
 from scipy.stats import wilcoxon
 from lp_rl import LAMS, MI0, T0
+import os; LPT = os.environ.get('LPTAG', 'lp'); SUF = '' if LPT == 'lp' else '_' + LPT   # v9: LPTAG=lpS -> cấu hình gọn
+
 
 
 def cw(h, lam): return lam * h[:, 0] / MI0 + (1 - lam) * h[:, 2] / T0
@@ -40,7 +42,7 @@ for lab in ['Gnone-Class', 'Gnone-Ded', 'Gnone-Hyb', 'WB-Scatter', 'Wanis-Score'
     hs = [np.load(x)['hist'] for x in sorted(glob.glob(f'results/v7/base/{lab}_0.5_s*.npz'))]
     H[lab] = lambda lam, hs=hs: hs
 H['GreedyJ'] = lambda lam: [np.load(f'results/lp/base_GreedyJ_{lam}_s0.npy')]
-H['LP-RL'] = lambda lam: [np.load(f'results/v7/base/LP-lp_s{s}_{float(lam)}_s0.npz')['hist'] for s in range(5)]
+H['LP-RL'] = lambda lam: [np.load(f'results/v7/base/LP-{LPT}_s{s}_{float(lam)}_s0.npz')['hist'] for s in range(5)]
 
 deep = []
 for f in ['results/rl_main2.csv'] + [f'results/rl_main2_s{s}.csv' for s in range(1, 5)]:
@@ -78,8 +80,8 @@ for lam, g in df.groupby('lam'):
                      best_other_J=others.iloc[0].J, lp_J=float(g[g.method == 'LP-RL'].J.iloc[0]),
                      lp_beats_all_sig=int(((sig.lam == lam).groupby(sig.method).size() > 0).sum())))
 os.makedirs('results/v7', exist_ok=True)
-df.to_csv('results/v7/compare_all.csv', index=False)
-json.dump(dict(rows=df.to_dict('records'), summary=summ, n_tests=len(tests)), open('results/v7/compare_all.json', 'w'), indent=1, default=float)
+df.to_csv(f'results/v7/compare_all{SUF}.csv', index=False)
+json.dump(dict(rows=df.to_dict('records'), summary=summ, n_tests=len(tests)), open(f'results/v7/compare_all{SUF}.json', 'w'), indent=1, default=float)
 piv = df.pivot(index='method', columns='lam', values='J').loc[ORDER]
 print(piv[[0.0, 0.2, 0.5, 0.8, 1.0]].round(3).to_string())
 print(pd.DataFrame(summ).round(3).to_string())

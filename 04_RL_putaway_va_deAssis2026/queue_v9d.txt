@@ -1,0 +1,3 @@
+--tag abS_gamma0_s2 --seed 2 --notref --reward wave --gamma 0
+--tag abS_gamma0_s3 --seed 3 --notref --reward wave --gamma 0
+--tag abS_gamma0_s4 --seed 4 --notref --reward wave --gamma 0

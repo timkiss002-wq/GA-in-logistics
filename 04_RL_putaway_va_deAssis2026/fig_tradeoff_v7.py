@@ -1,7 +1,9 @@
 """Bài v7b – hình đánh đổi MI–lộ trình với MỌI phương pháp (từ results/v7/compare_all.csv)."""
+import os; LPT = os.environ.get('LPTAG', 'lp'); SUF = '' if LPT == 'lp' else '_' + LPT   # v9: LPTAG=lpS -> cấu hình gọn
+
 import pandas as pd, matplotlib as mpl, matplotlib.pyplot as plt
 mpl.rcParams.update({'font.family': 'serif', 'mathtext.fontset': 'cm', 'font.size': 8})
-d = pd.read_csv('results/v7/compare_all.csv')
+d = pd.read_csv(f'results/v7/compare_all{SUF}.csv')
 fig, ax = plt.subplots(figsize=(3.45, 3.2))
 pts = [('Random', 'Random (current)', 's', '#888780'), ('Nearest', 'Nearest', '^', '#2a78d6'), ('Gnone-Class', 'Gnone class', 'v', '#1baf7a'), ('Gnone-Ded', 'Gnone dedicated', '<', '#1baf7a'), ('Gnone-Hyb', 'Gnone hybrid', '>', '#1baf7a'),
        ('Turnover', 'Turnover', 'D', '#2a78d6'), ('WB-Scatter', 'Weidinger-Boysen', 'P', '#008300'), ('Wanis-Score', 'Wanis score', 'X', '#eda100'),
@@ -18,4 +20,4 @@ ax.set_xlabel('route length per wave $T$ (dataset units)'); ax.set_ylabel('mixin
 for s in ['top', 'right']: ax.spines[s].set_visible(False)
 ax.grid(color='#e1e0d9', lw=0.5); ax.set_axisbelow(True)
 ax.legend(fontsize=5.6, ncol=2, frameon=False, loc='upper center', bbox_to_anchor=(0.5, -0.25))
-fig.tight_layout(); fig.savefig('results/v7/fig_tradeoff.pdf'); fig.savefig('results/v7/fig_tradeoff.png', dpi=170)
+fig.tight_layout(); fig.savefig(f'results/v7/fig_tradeoff{SUF}.pdf'); fig.savefig(f'results/v7/fig_tradeoff{SUF}.png', dpi=170)

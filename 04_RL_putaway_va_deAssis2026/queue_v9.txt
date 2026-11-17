@@ -1,0 +1,17 @@
+--tag lpS_s2 --seed 2 --notref --reward wave
+--tag lpS_s3 --seed 3 --notref --reward wave
+--tag lpS_s4 --seed 4 --notref --reward wave
+--tag abS_gamma0_s0 --seed 0 --notref --reward wave --gamma 0
+--tag abS_gamma0_s1 --seed 1 --notref --reward wave --gamma 0
+--tag abS_nomix_s0 --seed 0 --notref --reward wave --drop 1,2,3,4
+--tag abS_nomix_s1 --seed 1 --notref --reward wave --drop 1,2,3,4
+--tag abS_nolam_s0 --seed 0 --notref --reward wave --nolam
+--tag abS_nolam_s1 --seed 1 --notref --reward wave --nolam
+--tag lpSF0.0_s0 --seed 0 --notref --reward wave --lam 0.0
+--tag lpSF0.0_s1 --seed 1 --notref --reward wave --lam 0.0
+--tag lpSF0.5_s0 --seed 0 --notref --reward wave --lam 0.5
+--tag lpSF0.5_s1 --seed 1 --notref --reward wave --lam 0.5
+--tag lpSF1.0_s0 --seed 0 --notref --reward wave --lam 1.0
+--tag lpSF1.0_s1 --seed 1 --notref --reward wave --lam 1.0
+--tag lpSC_s0 --seed 0 --notref --reward wave --s0 class
+--tag lpSC_s1 --seed 1 --notref --reward wave --s0 class

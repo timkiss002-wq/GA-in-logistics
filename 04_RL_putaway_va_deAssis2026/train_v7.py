@@ -4,6 +4,7 @@ Bài v7 – huấn luyện LP-RL với đúng quy trình của bài v6 (lp_rl.tr
   --lam X       : θ riêng cho một λ cố định (kiểm tra ràng buộc 'một θ cho mọi λ')
   --notref      : bỏ T_ref (không trừ nhiễu của chính wave) khi huấn luyện
   --s0 class    : huấn luyện từ trạng thái đầu S0 khác (đổi giả định A3)
+  --reward wave : (v9) không tách reward; cùng --notref là cấu hình LP-RL gọn của bài v9
 Ví dụ: python train_v7.py --tag lpR_s0 --seed 0 --pick random
 """
 import argparse
@@ -14,6 +15,9 @@ ap = argparse.ArgumentParser()
 ap.add_argument('--tag', required=True); ap.add_argument('--seed', type=int, default=0)
 ap.add_argument('--pick', default='nearest'); ap.add_argument('--lam', type=float, default=None)
 ap.add_argument('--notref', action='store_true'); ap.add_argument('--s0', default=None)
+ap.add_argument('--reward', default='decomp')   # v9: 'wave' = không tách reward
+ap.add_argument('--gamma', type=float, default=0.99); ap.add_argument('--drop', default='')   # v9: ablation
+ap.add_argument('--nolam', action='store_true')                                            # v9: bỏ khối λX
 a = ap.parse_args()
 if a.pick != 'nearest':
     lp_rl.PutawayEnv = partial(robust_env.RobustEnv, pick=a.pick, seed=a.seed)
@@ -22,4 +26,5 @@ if a.s0:                                   # huấn luyện từ trạng thái �
     lp_rl.S = {'s0': np.load(f's0_v7/{a.s0}.npz')['s0'], 'w_start': lp_rl.S['w_start']}
 if a.notref:
     lp_rl.TREF = None
-lp_rl.train_restarts(a.tag, a.seed, 400_000, restarts=3, lam_fixed=a.lam)
+lp_rl.train_restarts(a.tag, a.seed, 400_000, restarts=3, lam_fixed=a.lam, reward=a.reward,
+                     gamma=a.gamma, drop=tuple(int(x) for x in a.drop.split(',') if x), use_lam=not a.nolam)

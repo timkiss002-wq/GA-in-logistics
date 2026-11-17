@@ -15,6 +15,8 @@ Bài v7 – phân tích các thí nghiệm mới (exp_v7.py, train_v7.py). Mọi
 import glob, json, os
 import numpy as np, pandas as pd
 from lp_rl import LAMS, MI0, T0
+import os; LPT = os.environ.get('LPTAG', 'lp'); SUF = '' if LPT == 'lp' else '_' + LPT   # v9: LPTAG=lpS -> cấu hình gọn
+
 
 R = 'results/v7'; OUT = {}
 
@@ -37,7 +39,7 @@ def avg(rows):
 
 def method_stats(scen, name, lam=0.5):
     if name == 'LP-RL':
-        rows = [stats(z, lam) for s in range(5) if (z := load(scen, f'LP:lp_s{s}', lam)) is not None]
+        rows = [stats(z, lam) for s in range(5) if (z := load(scen, f'LP:{LPT}_s{s}', lam)) is not None]
     elif name == 'GreedyJ':
         rows = [stats(z, lam) for z in [load(scen, 'GreedyJ', lam)] if z is not None]
     elif name in ('Random', 'DA_heuristic', 'DA_supervised', 'DA_adaptive', 'Gnone-Class', 'Gnone-Hyb'):
@@ -115,14 +117,14 @@ OUT['robust'] = rob
 # ---------------- 3. θ riêng theo λ, bỏ T_ref ----------------
 per_lam = []
 for lf in [0.0, 0.5, 1.0]:
-    rr = [stats(z, lf)['J'] for s in range(2) if (z := load('base', f'LP:lpF{lf}_s{s}', lf)) is not None]
+    rr = [stats(z, lf)['J'] for s in range(2) if (z := load('base', f'LP:{LPT}F{lf}_s{s}', lf)) is not None]
     sh = method_stats('base', 'LP-RL', lf)
     if rr and sh: per_lam.append(dict(lam=lf, fixed=float(np.mean(rr)), fixed_all=rr, shared=sh['J'], shared_sd=sh['J_sd']))
 OUT['per_lambda'] = per_lam
 nt = []
 for lam in [0.2, 0.5, 0.8]:
     for s in range(2):
-        z = load('base', f'LP:ab_notref_s{s}', lam); zm = load('base', f'LP:lp_s{s}', lam)
+        z = load('base', f'LP:ab_notref_s{s}', lam); zm = load('base', f'LP:{LPT}_s{s}', lam)
         if z is not None and zm is not None: nt.append(dict(lam=lam, seed=s, dJ=stats(z, lam)['J'] - stats(zm, lam)['J']))
 OUT['notref'] = nt
 
@@ -131,17 +133,17 @@ tref = np.load('tref.npy')
 from lp_rl import W_TEST
 vr = []
 for s in range(5):
-    z = load('base', f'LP:lp_s{s}', 0.5)
+    z = load('base', f'LP:{LPT}_s{s}', 0.5)
     if z is None: continue
     T = z['hist'][:, 2]; tr = tref[W_TEST:W_TEST + len(T)]
     vr.append(dict(var_T=float(T.var()), var_T_minus_ref=float((T - tr).var()), corr=float(np.corrcoef(T, tr)[0, 1])))
 OUT['tref_var'] = vr
 
 os.makedirs(R, exist_ok=True)
-json.dump(OUT, open(f'{R}/summary_v7.json', 'w'), indent=1, default=float)
-pd.DataFrame(time_rows).to_csv(f'{R}/time_lam05.csv', index=False)
-pd.DataFrame(grid).to_csv(f'{R}/time_grid.csv', index=False)
-pd.DataFrame([{k: v for k, v in r.items() if not k.endswith('_all')} for r in rob]).to_csv(f'{R}/robust.csv', index=False)
+json.dump(OUT, open(f'{R}/summary_v7{SUF}.json', 'w'), indent=1, default=float)
+pd.DataFrame(time_rows).to_csv(f'{R}/time_lam05{SUF}.csv', index=False)
+pd.DataFrame(grid).to_csv(f'{R}/time_grid{SUF}.csv', index=False)
+pd.DataFrame([{k: v for k, v in r.items() if not k.endswith('_all')} for r in rob]).to_csv(f'{R}/robust{SUF}.csv', index=False)
 print(pd.DataFrame(time_rows).round(4).to_string())
 print(pd.DataFrame(lam_rows).round(4).to_string())
 print(pd.DataFrame(grid).round(4).to_string())

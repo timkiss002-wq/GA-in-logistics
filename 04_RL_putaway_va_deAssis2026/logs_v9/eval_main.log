@@ -1,0 +1,119 @@
+base LP:lpS_s0 λ=0.0 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s0 λ=0.1 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s0 λ=0.2 s0: 21s, 0.26 ms/quyết định
+base LP:lpS_s0 λ=0.3 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s0 λ=0.4 s0: 21s, 0.26 ms/quyết định
+base LP:lpS_s0 λ=0.6 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s0 λ=0.7 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s0 λ=0.8 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s0 λ=0.9 s0: 22s, 0.26 ms/quyết định
+base LP:lpS_s0 λ=1.0 s0: 22s, 0.26 ms/quyết định
+base LP:lpS_s1 λ=0.0 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s1 λ=0.1 s0: 22s, 0.26 ms/quyết định
+base LP:lpS_s1 λ=0.2 s0: 22s, 0.26 ms/quyết định
+base LP:lpS_s1 λ=0.3 s0: 21s, 0.26 ms/quyết định
+base LP:lpS_s1 λ=0.4 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s1 λ=0.6 s0: 21s, 0.26 ms/quyết định
+base LP:lpS_s1 λ=0.7 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s1 λ=0.8 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s1 λ=0.9 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s1 λ=1.0 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s2 λ=0.0 s0: 22s, 0.26 ms/quyết định
+base LP:lpS_s2 λ=0.1 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s2 λ=0.2 s0: 22s, 0.26 ms/quyết định
+base LP:lpS_s2 λ=0.3 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s2 λ=0.4 s0: 22s, 0.26 ms/quyết định
+base LP:lpS_s2 λ=0.5 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s2 λ=0.6 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s2 λ=0.7 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s2 λ=0.8 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s2 λ=0.9 s0: 22s, 0.26 ms/quyết định
+base LP:lpS_s2 λ=1.0 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s3 λ=0.0 s0: 22s, 0.26 ms/quyết định
+base LP:lpS_s3 λ=0.1 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s3 λ=0.2 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s3 λ=0.3 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s3 λ=0.4 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s3 λ=0.5 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s3 λ=0.6 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s3 λ=0.7 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s3 λ=0.8 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s3 λ=0.9 s0: 22s, 0.26 ms/quyết định
+base LP:lpS_s3 λ=1.0 s0: 21s, 0.26 ms/quyết định
+base LP:lpS_s4 λ=0.0 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s4 λ=0.1 s0: 22s, 0.26 ms/quyết định
+base LP:lpS_s4 λ=0.2 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s4 λ=0.3 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s4 λ=0.4 s0: 21s, 0.26 ms/quyết định
+base LP:lpS_s4 λ=0.5 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s4 λ=0.6 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s4 λ=0.7 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s4 λ=0.8 s0: 23s, 0.28 ms/quyết định
+base LP:lpS_s4 λ=0.9 s0: 22s, 0.27 ms/quyết định
+base LP:lpS_s4 λ=1.0 s0: 23s, 0.28 ms/quyết định
+pick_random LP:lpS_s0 λ=0.5 s0: 25s, 0.29 ms/quyết định
+pick_random LP:lpS_s1 λ=0.5 s0: 24s, 0.28 ms/quyết định
+pick_random LP:lpS_s2 λ=0.5 s0: 23s, 0.27 ms/quyết định
+pick_random LP:lpS_s3 λ=0.5 s0: 23s, 0.27 ms/quyết định
+pick_random LP:lpS_s4 λ=0.5 s0: 22s, 0.27 ms/quyết định
+pick_top2 LP:lpS_s0 λ=0.5 s0: 24s, 0.28 ms/quyết định
+pick_top2 LP:lpS_s1 λ=0.5 s0: 24s, 0.28 ms/quyết định
+pick_top2 LP:lpS_s2 λ=0.5 s0: 25s, 0.29 ms/quyết định
+pick_top2 LP:lpS_s3 λ=0.5 s0: 24s, 0.28 ms/quyết định
+pick_top2 LP:lpS_s4 λ=0.5 s0: 24s, 0.28 ms/quyết định
+inb_lot LP:lpS_s0 λ=0.5 s0: 22s, 0.27 ms/quyết định
+inb_lot LP:lpS_s1 λ=0.5 s0: 22s, 0.27 ms/quyết định
+inb_lot LP:lpS_s2 λ=0.5 s0: 22s, 0.27 ms/quyết định
+inb_lot LP:lpS_s3 λ=0.5 s0: 23s, 0.28 ms/quyết định
+inb_lot LP:lpS_s4 λ=0.5 s0: 22s, 0.27 ms/quyết định
+inb_delay LP:lpS_s0 λ=0.5 s0: 22s, 0.27 ms/quyết định
+inb_delay LP:lpS_s1 λ=0.5 s0: 22s, 0.27 ms/quyết định
+inb_delay LP:lpS_s2 λ=0.5 s0: 22s, 0.27 ms/quyết định
+inb_delay LP:lpS_s3 λ=0.5 s0: 22s, 0.28 ms/quyết định
+inb_delay LP:lpS_s4 λ=0.5 s0: 21s, 0.27 ms/quyết định
+s0_seed1 LP:lpS_s0 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_seed1 LP:lpS_s1 λ=0.5 s0: 23s, 0.27 ms/quyết định
+s0_seed1 LP:lpS_s2 λ=0.5 s0: 23s, 0.28 ms/quyết định
+s0_seed1 LP:lpS_s3 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_seed1 LP:lpS_s4 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_seed2 LP:lpS_s0 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_seed2 LP:lpS_s1 λ=0.5 s0: 23s, 0.28 ms/quyết định
+s0_seed2 LP:lpS_s2 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_seed2 LP:lpS_s3 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_seed2 LP:lpS_s4 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_fill70 LP:lpS_s0 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_fill70 LP:lpS_s1 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_fill70 LP:lpS_s2 λ=0.5 s0: 23s, 0.27 ms/quyết định
+s0_fill70 LP:lpS_s3 λ=0.5 s0: 23s, 0.28 ms/quyết định
+s0_fill70 LP:lpS_s4 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_fill90 LP:lpS_s0 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_fill90 LP:lpS_s1 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_fill90 LP:lpS_s2 λ=0.5 s0: 23s, 0.27 ms/quyết định
+s0_fill90 LP:lpS_s3 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_fill90 LP:lpS_s4 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_class LP:lpS_s0 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_class LP:lpS_s1 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_class LP:lpS_s2 λ=0.5 s0: 22s, 0.27 ms/quyết định
+s0_class LP:lpS_s3 λ=0.5 s0: 23s, 0.28 ms/quyết định
+s0_class LP:lpS_s4 λ=0.5 s0: 22s, 0.27 ms/quyết định
+λ 0.5: MI 0.6743 | T 2966.1 | J 0.6947
+λ 0.5: MI 0.8088 | T 3401.1 | J 0.8172
+λ 0.5: MI 0.6181 | T 3143.9 | J 0.6805
+λ 0.5: MI 0.7138 | T 2813.8 | J 0.7019
+λ 0.5: MI 0.8288 | T 3284.7 | J 0.8168
+λ 0.5: MI 0.6664 | T 2856.1 | J 0.6789
+λ 0.5: MI 0.6934 | T 3010.5 | J 0.7103
+λ 0.5: MI 0.8151 | T 3380.4 | J 0.8187
+λ 0.5: MI 0.6449 | T 3229.6 | J 0.7048
+λ 0.5: MI 0.6995 | T 2850.1 | J 0.6974
+λ 0.5: MI 0.8190 | T 3297.0 | J 0.8124
+λ 0.5: MI 0.6489 | T 2849.1 | J 0.6680
+λ 0.5: MI 0.6800 | T 2934.3 | J 0.6948
+λ 0.5: MI 0.8157 | T 3339.3 | J 0.8148
+λ 0.5: MI 0.6218 | T 2939.2 | J 0.6616
+lpS_s0_0.5             GRO TB =  2867.2 | 10s
+lpS_s1_0.5             GRO TB =  2731.9 | 4s
+lpS_s2_0.5             GRO TB =  2900.1 | 5s
+lpS_s3_0.5             GRO TB =  2772.9 | 4s
+lpS_s4_0.5             GRO TB =  2829.9 | 3s
+DONE
